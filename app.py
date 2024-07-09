@@ -1,34 +1,40 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, ClientSettings
+from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, ClientSettings, WebRtcMode
 import av
 import numpy as np
 import whisper
+import soundfile as sf
+import queue
 
 # Load the Whisper model
 model = whisper.load_model("base")
 
+# AudioProcessor class for handling audio stream
 class AudioProcessor(AudioProcessorBase):
     def __init__(self):
-        self.audio_buffer = []
+        self.audio_buffer = queue.Queue()
+        self.frames = []
 
-    def recv(self, frame: av.AudioFrame) -> av.AudioFrame:
+    def recv(self, frame):
         audio = frame.to_ndarray()
-        self.audio_buffer.extend(audio)
+        self.frames.append(audio)
         return frame
 
     def get_audio_text(self):
-        audio_array = np.concatenate(self.audio_buffer, axis=0).flatten().astype(np.float32)
-        audio_array = audio_array / np.max(np.abs(audio_array))  # Normalize audio
-        result = model.transcribe(audio_array, fp16=False)
-        transcription = result['text']
-        return transcription
+        audio_data = np.concatenate(self.frames, axis=0).astype(np.float32)
+        audio_data = audio_data / np.max(np.abs(audio_data))  # Normalize audio
+        with sf.SoundFile('temp.wav', mode='w', samplerate=16000, channels=1) as file:
+            file.write(audio_data)
+
+        result = model.transcribe('temp.wav')
+        return result['text']
 
 # Streamlit interface
-st.title("Real-time Speech to Text with Whisper")
+st.title("Real-time Transcription with Whisper")
 
 webrtc_ctx = webrtc_streamer(
     key="speech-to-text",
-    mode="sendrecv",
+    mode=WebRtcMode.SENDRECV,
     client_settings=ClientSettings(
         rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
         media_stream_constraints={"audio": True, "video": False},
