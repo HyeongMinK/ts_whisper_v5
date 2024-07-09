@@ -44,7 +44,7 @@ if webrtc_ctx.state.playing:
 if webrtc_ctx.state.playing is False and webrtc_ctx.audio_processor:
     # Retrieve audio frames
     audio_frames = webrtc_ctx.audio_processor.get_audio_frames()
-    
+    print("시발시발시발")
     if audio_frames:
         # Save audio to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_wav_file:
