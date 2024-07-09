@@ -27,8 +27,8 @@ class AudioProcessor(AudioProcessorBase):
         if len(audio_list) == 0:
             return "No audio data received"
 
-        audio_data = np.concatenate(audio_list, axis=0).astype(np.float32)
-        audio_data = audio_data / np.max(np.abs(audio_data))  # Normalize audio
+        audio_data = np.concatenate(audio_list, axis=1).astype(np.float32)
+        audio_data = audio_data.flatten() / np.max(np.abs(audio_data))  # Flatten and normalize audio
         with sf.SoundFile('temp.wav', mode='w', samplerate=16000, channels=1) as file:
             file.write(audio_data)
 
