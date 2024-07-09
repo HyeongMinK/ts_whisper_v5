@@ -29,11 +29,11 @@ def transcribe_audio(audio):
         
         return result['text']
 
-def gpt_call(client, text):
+def gpt_call(client, text, selected_language):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "Your only task is to translate English to Korean. Do not write anything other than the translation."},
+            {"role": "system", "content": f"Your only task is to translate to {selected_language}. Do not write anything other than the translation."},
             {"role": "user", "content": text}
         ]
     )
@@ -52,16 +52,21 @@ def text_to_speech(client, text):
     return tmp_file_name
 
 # Streamlit interface
-st.title("Audio Recording and Transcription with Whisper")
+st.title("Streamlit Audio Translator")
 
-st.write("Record your audio and transcribe it to text.")
+st.write("Select the language of the translation result and click Start!")
+# 선택할 수 있는 언어 목록
+languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
-audio = mic_recorder(start_prompt="Start recording", stop_prompt="Stop recording", format="webm")
+#언어 선택 박스 (기본값을 영어로 설정)
+selected_language = st.selectbox('번역의 결과 언어를 선택하고 Start를 누르세요!', languages, index=1)
+
+audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
 
 if audio:
     st.audio(audio['bytes'], format='audio/webm')
     transcription = transcribe_audio(audio)
-    ts_text = gpt_call(client, transcription)
+    ts_text = gpt_call(client, transcription, selected_language)
     st.write("Transcription:")
     st.write(transcription)
     st.write("Translation:")
