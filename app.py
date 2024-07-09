@@ -23,6 +23,10 @@ def transcribe_audio(audio):
 
         # Transcribe audio using Whisper
         result = model.transcribe(tmp_wav_file.name)
+        
+        # Delete the temporary file
+        os.remove(tmp_wav_file.name)
+        
         return result['text']
 
 def gpt_call(client, text):
@@ -43,7 +47,9 @@ def text_to_speech(client, text):
     )
     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_audio_file:
         response.stream_to_file(tmp_audio_file.name)
-        return tmp_audio_file.name
+        tmp_file_name = tmp_audio_file.name
+    
+    return tmp_file_name
 
 # Streamlit interface
 st.title("Audio Recording and Transcription with Whisper")
@@ -63,6 +69,11 @@ if audio:
 
     # Convert translated text to speech
     tts_audio_data = text_to_speech(client, ts_text)
-    
-    # Play the TTS audio
-    st.audio(tts_audio_data, format='audio/wav')
+
+    # Store the TTS audio data in the session state
+    st.session_state.tts_audio_data = tts_audio_data
+
+# Automatically play the TTS audio if available
+if 'tts_audio_data' in st.session_state:
+    st.audio(st.session_state.tts_audio_data, format='audio/mp3')
+    os.remove(st.session_state.tts_audio_data)
