@@ -30,10 +30,14 @@ st.title("Audio Recording and Transcription with Whisper")
 st.write("Record your audio and transcribe it to text.")
 
 # WebRTC Streamer for recording audio
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
+
 webrtc_ctx = webrtc_streamer(
     key="audio-recorder",
     mode=WebRtcMode.SENDRECV,
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    rtc_configuration=RTC_CONFIGURATION,
     media_stream_constraints={"audio": True, "video": False},
     audio_processor_factory=AudioProcessor,
     async_processing=True,
