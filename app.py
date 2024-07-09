@@ -52,9 +52,17 @@ if ctx.state.playing:
             audio_data.append(audio_segment.raw_data)
         
         if audio_data:
+            # 음성 데이터 크기 확인
+            st.write(f"Collected {len(audio_data)} audio segments")
+
+            # 음성 데이터를 numpy 배열로 변환
             audio_bytes = b"".join(audio_data)
             np_audio = np.frombuffer(audio_bytes, np.int16).astype(np.float32) / 32768.0
-            
+
             # Whisper 모델을 사용하여 음성을 텍스트로 변환
+            st.write("Transcribing audio...")
             result = model.transcribe(np_audio)
+            st.write("Transcription complete")
             text_output.text(result["text"])
+        else:
+            st.write("No audio data collected")
