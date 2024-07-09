@@ -1,72 +1,69 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
-import whisper
+import sounddevice as sd
 import numpy as np
-from pydub import AudioSegment
 import queue
-import av
+import threading
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
+import torch
 
-# Whisper 모델 로드
-model = whisper.load_model("base")
+# Streamlit configuration
+st.title("Real-time Speech to Text with Whisper")
+st.write("Press the button and start speaking")
 
-# WebRTC 설정
-RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
+# Initialize variables
+q = queue.Queue()
+recorder = None
+recording = False
 
-# 오디오 처리 클래스
-class AudioProcessor:
-    def __init__(self):
-        self.audio_queue = queue.Queue()
-    
-    def recv(self, frame):
-        audio = frame.to_ndarray()
-        audio_segment = AudioSegment(
-            data=audio.tobytes(),
-            sample_width=audio.dtype.itemsize,
-            frame_rate=frame.sample_rate,
-            channels=len(audio.shape),
-        )
-        self.audio_queue.put(audio_segment)
-        return frame
+# Load pre-trained model and tokenizer from Hugging Face
+model_name = "facebook/wav2vec2-large-960h"
+tokenizer = Wav2Vec2Tokenizer.from_pretrained(model_name)
+model = Wav2Vec2ForCTC.from_pretrained(model_name)
 
-# Streamlit 어플리케이션
-st.title("Real-time Speech-to-Text with Whisper")
+# Function to record audio
+def audio_callback(indata, frames, time, status):
+    q.put(indata.copy())
 
-# WebRTC 스트리머
-ctx = webrtc_streamer(
-    key="speech-to-text",
-    mode=WebRtcMode.SENDRECV,
-    rtc_configuration=RTC_CONFIGURATION,
-    media_stream_constraints={"audio": True, "video": False},
-    audio_processor_factory=AudioProcessor,
-)
+def start_recording():
+    global recorder
+    recorder = sd.InputStream(samplerate=16000, channels=1, callback=audio_callback)
+    recorder.start()
 
-# 텍스트 출력 영역
-text_output = st.empty()
+def stop_recording():
+    global recorder
+    recorder.stop()
 
-def transcribe_audio(audio_segments):
-    audio_bytes = b"".join(audio_segments)
-    np_audio = np.frombuffer(audio_bytes, np.int16).astype(np.float32) / 32768.0
+def audio_to_text(audio):
+    input_values = tokenizer(audio, return_tensors="pt").input_values
+    with torch.no_grad():
+        logits = model(input_values).logits
+    predicted_ids = torch.argmax(logits, dim=-1)
+    transcription = tokenizer.batch_decode(predicted_ids)[0]
+    return transcription
 
-    # Whisper 모델을 사용하여 음성을 텍스트로 변환
-    result = model.transcribe(np_audio)
-    return result["text"]
+def main():
+    global recording
+    if st.button("Start Recording"):
+        recording = True
+        start_recording()
+        st.write("Recording...")
 
-if ctx.state.playing:
-    audio_processor = ctx.audio_processor
-    if audio_processor:
-        audio_segments = []
-        while not audio_processor.audio_queue.empty():
-            audio_segment = audio_processor.audio_queue.get()
-            audio_segments.append(audio_segment.raw_data)
-        
-        if audio_segments:
-            st.write(f"Collected {len(audio_segments)} audio segments")
-            st.write("Transcribing audio...")
+    if st.button("Stop Recording"):
+        recording = False
+        stop_recording()
+        st.write("Recording stopped.")
 
-            # 비동기적 변환과 실시간 업데이트를 위해 텍스트 변환 및 출력
-            text = transcribe_audio(audio_segments)
-            text_output.markdown(f"**Transcribed Text:** {text}")
+    if recording:
+        st.write("Listening...")
+        audio_frames = []
+        while not q.empty():
+            audio_frames.append(q.get())
 
-            st.write("Transcription complete")
-        else:
-            st.write("No audio data collected")
+        if audio_frames:
+            audio_data = np.concatenate(audio_frames)
+            transcription = audio_to_text(audio_data)
+            st.write("Transcription:")
+            st.write(transcription)
+
+if __name__ == "__main__":
+    main()
