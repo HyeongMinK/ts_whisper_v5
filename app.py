@@ -1,69 +1,44 @@
 import streamlit as st
-import sounddevice as sd
+from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, ClientSettings
+import av
 import numpy as np
-import queue
-import threading
-from transformers import Wav2Vec2ForCTC, Wav2Vec2Tokenizer
-import torch
+import whisper
 
-# Streamlit configuration
+# Load the Whisper model
+model = whisper.load_model("base")
+
+class AudioProcessor(AudioProcessorBase):
+    def __init__(self):
+        self.audio_buffer = []
+
+    def recv(self, frame: av.AudioFrame) -> av.AudioFrame:
+        audio = frame.to_ndarray()
+        self.audio_buffer.extend(audio)
+        return frame
+
+    def get_audio_text(self):
+        audio_array = np.concatenate(self.audio_buffer, axis=0).flatten().astype(np.float32)
+        audio_array = audio_array / np.max(np.abs(audio_array))  # Normalize audio
+        result = model.transcribe(audio_array, fp16=False)
+        transcription = result['text']
+        return transcription
+
+# Streamlit interface
 st.title("Real-time Speech to Text with Whisper")
-st.write("Press the button and start speaking")
 
-# Initialize variables
-q = queue.Queue()
-recorder = None
-recording = False
+webrtc_ctx = webrtc_streamer(
+    key="speech-to-text",
+    mode="sendrecv",
+    client_settings=ClientSettings(
+        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+        media_stream_constraints={"audio": True, "video": False},
+    ),
+    audio_processor_factory=AudioProcessor,
+    async_processing=True,
+)
 
-# Load pre-trained model and tokenizer from Hugging Face
-model_name = "facebook/wav2vec2-large-960h"
-tokenizer = Wav2Vec2Tokenizer.from_pretrained(model_name)
-model = Wav2Vec2ForCTC.from_pretrained(model_name)
-
-# Function to record audio
-def audio_callback(indata, frames, time, status):
-    q.put(indata.copy())
-
-def start_recording():
-    global recorder
-    recorder = sd.InputStream(samplerate=16000, channels=1, callback=audio_callback)
-    recorder.start()
-
-def stop_recording():
-    global recorder
-    recorder.stop()
-
-def audio_to_text(audio):
-    input_values = tokenizer(audio, return_tensors="pt").input_values
-    with torch.no_grad():
-        logits = model(input_values).logits
-    predicted_ids = torch.argmax(logits, dim=-1)
-    transcription = tokenizer.batch_decode(predicted_ids)[0]
-    return transcription
-
-def main():
-    global recording
-    if st.button("Start Recording"):
-        recording = True
-        start_recording()
-        st.write("Recording...")
-
-    if st.button("Stop Recording"):
-        recording = False
-        stop_recording()
-        st.write("Recording stopped.")
-
-    if recording:
-        st.write("Listening...")
-        audio_frames = []
-        while not q.empty():
-            audio_frames.append(q.get())
-
-        if audio_frames:
-            audio_data = np.concatenate(audio_frames)
-            transcription = audio_to_text(audio_data)
-            st.write("Transcription:")
-            st.write(transcription)
-
-if __name__ == "__main__":
-    main()
+if webrtc_ctx.audio_processor:
+    if st.button("Get Transcription"):
+        transcription = webrtc_ctx.audio_processor.get_audio_text()
+        st.write("Transcription:")
+        st.write(transcription)

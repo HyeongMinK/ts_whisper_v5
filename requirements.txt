@@ -1,5 +1,6 @@
-transformers
-torch
-sounddevice
-pydub
+streamlit
+streamlit-webrtc
+openai-whisper
+soundfile
+av
 numpy
