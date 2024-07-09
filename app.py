@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, ClientSettings, WebRtcMode
+from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, WebRtcMode, RTCConfiguration
 import av
 import numpy as np
 import whisper
@@ -32,13 +32,13 @@ class AudioProcessor(AudioProcessorBase):
 # Streamlit interface
 st.title("Real-time Transcription with Whisper")
 
+RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
+
 webrtc_ctx = webrtc_streamer(
     key="speech-to-text",
     mode=WebRtcMode.SENDRECV,
-    client_settings=ClientSettings(
-        rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-        media_stream_constraints={"audio": True, "video": False},
-    ),
+    rtc_configuration=RTC_CONFIGURATION,
+    media_stream_constraints={"audio": True, "video": False},
     audio_processor_factory=AudioProcessor,
     async_processing=True,
 )
