@@ -1,0 +1,4 @@
+streamlit
+pyaudio
+numpy
+openai-whisper
