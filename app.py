@@ -71,9 +71,8 @@ selected_language = st.selectbox('Language', languages, index=1)
 if selected_language != st.session_state.selected_language:
     st.session_state.selected_language = selected_language
     st.session_state.audio = None  # Reset the audio data
-    audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
-else:
-    audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
+
+audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm",just_once=True)
 
 if audio:
     st.session_state.audio = audio  # Store audio in session state
