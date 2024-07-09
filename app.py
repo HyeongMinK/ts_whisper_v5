@@ -58,14 +58,28 @@ st.write("Select the language of the translation result and click Start!")
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
-#언어 선택 박스 (기본값을 영어로 설정)
-selected_language = st.selectbox('번역의 결과 언어를 선택하고 Start를 누르세요!', languages, index=1)
+# Initialize session state for selected language and audio data
+if 'selected_language' not in st.session_state:
+    st.session_state.selected_language = 'English'
+if 'audio' not in st.session_state:
+    st.session_state.audio = None
+
+# 언어 선택 박스 (기본값을 영어로 설정)
+selected_language = st.selectbox('Language', languages, index=1)
+
+# Check if the selected language has changed
+if selected_language != st.session_state.selected_language:
+    st.session_state.selected_language = selected_language
+    st.session_state.audio = None  # Reset the audio data
 
 audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
 
 if audio:
-    st.audio(audio['bytes'], format='audio/webm')
-    transcription = transcribe_audio(audio)
+    st.session_state.audio = audio  # Store audio in session state
+
+if st.session_state.audio:
+    st.audio(st.session_state.audio['bytes'], format='audio/webm')
+    transcription = transcribe_audio(st.session_state.audio)
     ts_text = gpt_call(client, transcription, selected_language)
     st.write("Transcription:")
     st.write(transcription)
@@ -82,3 +96,4 @@ if audio:
 if 'tts_audio_data' in st.session_state:
     st.audio(st.session_state.tts_audio_data, format='audio/mp3')
     os.remove(st.session_state.tts_audio_data)
+    del st.session_state.tts_audio_data  # Remove the TTS audio data after playing
