@@ -1,80 +1,49 @@
 import streamlit as st
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
 import whisper
-import pyaudio
 import numpy as np
+import av
 import threading
-import queue
 
 # Whisper 모델 로드
 model = whisper.load_model("base")
 
-# PyAudio 설정
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 16000
+# 녹음된 오디오 데이터를 저장할 버퍼
+audio_buffer = []
 
-audio_queue = queue.Queue()
-stop_event = threading.Event()
+# WebRTC 설정
+WEBRTC_CLIENT_SETTINGS = ClientSettings(
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    media_stream_constraints={"audio": True, "video": False},
+)
 
-def audio_callback(in_data, frame_count, time_info, status):
-    audio_queue.put(in_data)
-    return (in_data, pyaudio.paContinue)
+# 오디오 프레임 처리 콜백
+def audio_frame_callback(frame: av.AudioFrame):
+    global audio_buffer
+    audio = frame.to_ndarray()
+    audio_buffer.append(audio)
+    return av.AudioFrame.from_ndarray(audio, layout=frame.layout.name)
 
-p = pyaudio.PyAudio()
-
-stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK,
-                stream_callback=audio_callback)
-
-def record_audio():
-    st.write("Recording... Press 'Stop Recording' to stop.")
-    stream.start_stream()
-
-    frames = []
-    while not stop_event.is_set():
-        data = audio_queue.get()
-        frames.append(data)
-
-    stream.stop_stream()
-    st.write("Recording stopped.")
-
-    audio_data = np.frombuffer(b''.join(frames), dtype=np.int16)
-
-    # Whisper 모델을 사용하여 텍스트로 변환
-    result = model.transcribe(audio_data, language='ko')
-    st.session_state.transcribed_text = result["text"]
-
-def start_recording():
-    stop_event.clear()
-    record_thread = threading.Thread(target=record_audio)
-    record_thread.start()
-    return record_thread
-
-# Streamlit 인터페이스 설정
-st.title("Real-time Audio Recording with Whisper")
-
-if st.button("Start Recording"):
-    if 'record_thread' in st.session_state:
-        if st.session_state.record_thread.is_alive():
-            st.write("Recording is already in progress.")
-        else:
-            st.session_state.record_thread = start_recording()
-    else:
-        st.session_state.record_thread = start_recording()
+# 녹음 시작 및 중지 컨트롤
+webrtc_ctx = webrtc_streamer(
+    key="audio",
+    mode=WebRtcMode.SENDRECV,
+    client_settings=WEBRTC_CLIENT_SETTINGS,
+    audio_frame_callback=audio_frame_callback,
+    media_stream_constraints={"video": False, "audio": True},
+)
 
 if st.button("Stop Recording"):
-    stop_event.set()
-    if 'record_thread' in st.session_state:
-        st.session_state.record_thread.join()
-        del st.session_state.record_thread
+    webrtc_ctx.stop()
+    if audio_buffer:
+        # 오디오 버퍼를 numpy 배열로 변환
+        audio_data = np.concatenate(audio_buffer, axis=1).flatten()
 
-# 녹음된 텍스트 표시
-if 'transcribed_text' in st.session_state:
-    st.write("You said: ", st.session_state.transcribed_text)
+        # Whisper 모델을 사용하여 텍스트로 변환
+        result = model.transcribe(audio_data, language='ko')
+        st.write("You said: ", result["text"])
 
-stream.close()
-p.terminate()
+        # 오디오 버퍼 초기화
+        audio_buffer = []
+    else:
+        st.write("No audio data recorded.")

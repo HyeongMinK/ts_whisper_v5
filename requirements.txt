@@ -1,4 +1,4 @@
 streamlit
-pyaudio
+streamlit-webrtc
 numpy
 openai-whisper
