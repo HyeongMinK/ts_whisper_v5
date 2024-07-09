@@ -6,6 +6,7 @@ import numpy as np
 import io
 import tempfile
 from openai import OpenAI
+import os
 
 # Load the Whisper model
 model = whisper.load_model("base")
