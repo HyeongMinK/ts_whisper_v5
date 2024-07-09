@@ -12,9 +12,10 @@ class AudioProcessor(AudioProcessorBase):
     def __init__(self):
         self.audio_frames = []
 
-    def recv(self, frame):
-        self.audio_frames.append(frame.to_ndarray().flatten())
-        return frame
+    def recv_queued(self, frames):
+        for frame in frames:
+            self.audio_frames.append(frame.to_ndarray().flatten())
+        return frames
 
     def get_audio_frames(self):
         return self.audio_frames
