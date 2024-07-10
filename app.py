@@ -4,6 +4,10 @@ import whisper
 import tempfile
 from openai import OpenAI
 import os
+import warnings
+
+# Suppress FP16 warning
+warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
 # Load the Whisper model
 model = whisper.load_model("base")
