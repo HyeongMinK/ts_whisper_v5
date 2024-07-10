@@ -51,6 +51,21 @@ def text_to_speech(client, text):
     
     return tmp_file_name
 
+# Callback function to handle new audio
+def handle_new_audio(audio):
+    transcription = transcribe_audio(audio)
+    ts_text = gpt_call(client, transcription, st.session_state.selected_language)
+    st.write("Transcription:")
+    st.write(transcription)
+    st.write("Translation:")
+    st.write(ts_text)
+
+    # Convert translated text to speech
+    tts_audio_data = text_to_speech(client, ts_text)
+
+    # Store the TTS audio data in the session state
+    st.session_state.tts_audio_data = tts_audio_data
+
 # Streamlit interface
 st.title("Streamlit Audio Translator")
 
@@ -72,28 +87,17 @@ if selected_language != st.session_state.selected_language:
     st.session_state.selected_language = selected_language
     st.session_state.audio = None  # Reset the audio data
 
-audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm",just_once=True)
+# Use the mic_recorder with callback
+audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=handle_new_audio)
 
 if audio:
     st.session_state.audio = audio  # Store audio in session state
 
 if st.session_state.audio:
     st.audio(st.session_state.audio['bytes'], format='audio/webm')
-    transcription = transcribe_audio(st.session_state.audio)
-    ts_text = gpt_call(client, transcription, selected_language)
-    st.write("Transcription:")
-    st.write(transcription)
-    st.write("Translation:")
-    st.write(ts_text)
-
-    # Convert translated text to speech
-    tts_audio_data = text_to_speech(client, ts_text)
-
-    # Store the TTS audio data in the session state
-    st.session_state.tts_audio_data = tts_audio_data
 
 # Automatically play the TTS audio if available
 if 'tts_audio_data' in st.session_state:
-    st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
+    st.audio(st.session_state.tts_audio_data, format='audio/mp3',autoplay=True)
     os.remove(st.session_state.tts_audio_data)
     del st.session_state.tts_audio_data  # Remove the TTS audio data after playing
