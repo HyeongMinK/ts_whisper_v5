@@ -10,7 +10,11 @@ import warnings
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
 # Load the Whisper model
-model = whisper.load_model("base")
+@st.cache_resource
+def load_whisper_model():
+    return whisper.load_model("base")
+
+model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
 client = OpenAI(api_key=api_key)
 if not api_key:
