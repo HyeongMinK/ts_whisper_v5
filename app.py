@@ -94,6 +94,6 @@ if st.session_state.audio:
 
 # Automatically play the TTS audio if available
 if 'tts_audio_data' in st.session_state:
-    st.audio(st.session_state.tts_audio_data, format='audio/mp3')
+    st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
     os.remove(st.session_state.tts_audio_data)
     del st.session_state.tts_audio_data  # Remove the TTS audio data after playing
