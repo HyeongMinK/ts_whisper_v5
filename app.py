@@ -21,25 +21,14 @@ def transcribe_audio(file_path):
     return result['text']
 
 def gpt_call(client, text, selected_language):
-    messages = [
-        {"role": "system", "content": f"Your only task is to translate to {selected_language}. Do not write anything other than the translation."},
-        {"role": "user", "content": text}
-    ]
-    
-    response = client.ChatCompletion.create(
-        model="gpt-4",
-        messages=messages,
-        stream=True
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": f"Your only task is to translate to {selected_language}. Do not write anything other than the translation."},
+            {"role": "user", "content": text}
+        ]
     )
-    
-    result = ""
-    for chunk in response:
-        if "choices" in chunk:
-            choice = chunk["choices"][0]
-            if "delta" in choice and "content" in choice["delta"]:
-                result += choice["delta"]["content"]
-    
-    return result
+    return completion.choices[0].message.content
 
 def text_to_speech(client, text):
     response = client.audio.speech.create(
