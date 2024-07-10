@@ -88,7 +88,7 @@ if selected_language != st.session_state.selected_language:
     st.session_state.audio = None  # Reset the audio data
 
 # Use the mic_recorder with callback
-audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=handle_new_audio)
+audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=handle_new_audio, just_once = True)
 
 if audio:
     st.session_state.audio = audio  # Store audio in session state
@@ -98,6 +98,6 @@ if st.session_state.audio:
 
 # Automatically play the TTS audio if available
 if 'tts_audio_data' in st.session_state:
-    st.audio(st.session_state.tts_audio_data, format='audio/mp3',autoplay=True)
+    st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
     os.remove(st.session_state.tts_audio_data)
     del st.session_state.tts_audio_data  # Remove the TTS audio data after playing
