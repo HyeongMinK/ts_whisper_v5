@@ -82,7 +82,7 @@ if st.session_state.is_recording == True:
 
     st.session_state.is_recording = False
 
-if st.session_state.once_recording == True
+if st.session_state.once_recording == True:
     st.write("Transcription:")
     st.write(transcription)
     st.audio(file_path, format='audio/webm')
