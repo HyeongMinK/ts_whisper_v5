@@ -56,12 +56,11 @@ st.text_area("Write your notes here:", height=200)
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
-# Initialize session state for selected language
-if 'selected_language' not in st.session_state:
-    st.session_state.selected_language = 'English'
-
 if 'is_recording' not in st.session_state:
     st.session_state.is_recording = False
+
+if 'once_recording' not in st.session_state:
+    st.session_state.once_recording = False
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
@@ -70,30 +69,30 @@ selected_language = st.selectbox('Language', languages, index=1)
 audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=state_recode)
 
 if st.session_state.is_recording == True:
+    st.session_state.once_recording = True
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         tmp_wav_file.write(audio["bytes"])
         tmp_wav_file.flush()
         file_path = tmp_wav_file.name
-
-    st.audio(file_path, format='audio/webm')
     transcription = transcribe_audio(file_path)
     ts_text = gpt_call(client, transcription, selected_language)
-    st.write("Transcription:")
-    st.write(transcription)
-    st.write("Translation:")
-    st.write(ts_text)
 
     # Convert translated text to speech
     tts_audio_data = text_to_speech(client, ts_text)
 
+    st.session_state.is_recording = False
+
+if st.session_state.once_recording == True
+    st.write("Transcription:")
+    st.write(transcription)
+    st.audio(file_path, format='audio/webm')
+
+    st.write("Translation:")
+    st.write(ts_text)
     # Automatically play the TTS audio if available
     st.audio(tts_audio_data, format='audio/mp3', autoplay=True)
 
     # Delete temporary files
     os.remove(file_path)
     os.remove(tts_audio_data)
-    st.session_state.is_recording = False
 
-# Check if the selected language has changed
-if selected_language != st.session_state.selected_language:
-    st.session_state.selected_language = selected_language
