@@ -3,6 +3,7 @@ from streamlit_mic_recorder import mic_recorder
 import whisper
 import tempfile
 from openai import OpenAI
+from streamlit_ace import st_ace
 import os
 import warnings
 
