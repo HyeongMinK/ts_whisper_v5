@@ -93,6 +93,6 @@ if st.session_state.once_recording == True:
     st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
 
     # Delete temporary files
-    os.remove(st.session_state.file_path)
-    os.remove(st.session_state.tts_audio_data)
+    #os.remove(st.session_state.file_path)
+    #os.remove(st.session_state.tts_audio_data)
 
