@@ -92,7 +92,7 @@ if st.session_state.is_recording == True:
     # Delete temporary files
     os.remove(file_path)
     os.remove(tts_audio_data)
-    st.session_state.is_recording == False
+    st.session_state.is_recording = False
 
 # Check if the selected language has changed
 if selected_language != st.session_state.selected_language:
