@@ -21,7 +21,7 @@ if not api_key:
     raise ValueError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
 
 def transcribe_audio(file_path):
-    result = model.transcribe(file_path)
+    result = model.transcribe(file_path, language='ko')
     return result['text']
 
 def gpt_call(client, text, selected_language):
