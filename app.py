@@ -18,7 +18,7 @@ def load_whisper_model():
 model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
 client = OpenAI(api_key=api_key)
-st_ace(value=content, language="text", theme="github", height=400)
+st_ace(value="Text Box", language="text", theme="github", height=400)
 if not api_key:
     raise ValueError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
 
