@@ -45,6 +45,8 @@ def text_to_speech(client, text):
         tmp_file_name = tmp_audio_file.name
     
     return tmp_file_name
+def state_recode():
+    st.session_state.is_recording = True
 
 # Streamlit interface
 st.title("Streamlit Audio Translator")
@@ -58,13 +60,16 @@ languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', '�
 if 'selected_language' not in st.session_state:
     st.session_state.selected_language = 'English'
 
+if 'is_recording' not in st.session_state:
+    st.session_state.is_recording = False
+
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
 
 
 audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
 
-if audio and selected_language == st.session_state.selected_language:
+if st.session_state.is_recording == True:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         tmp_wav_file.write(audio["bytes"])
         tmp_wav_file.flush()
@@ -87,6 +92,7 @@ if audio and selected_language == st.session_state.selected_language:
     # Delete temporary files
     os.remove(file_path)
     os.remove(tts_audio_data)
+    st.session_state.is_recording == False
 
 # Check if the selected language has changed
 if selected_language != st.session_state.selected_language:
