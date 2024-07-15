@@ -73,26 +73,26 @@ if st.session_state.is_recording == True:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         tmp_wav_file.write(audio["bytes"])
         tmp_wav_file.flush()
-        file_path = tmp_wav_file.name
-    transcription = transcribe_audio(file_path)
-    ts_text = gpt_call(client, transcription, selected_language)
+        st.session_state.file_path = tmp_wav_file.name
+    st.session_state.transcription = transcribe_audio(st.session_state.file_path)
+    st.session_state.ts_text = gpt_call(client, st.session_state.transcription, selected_language)
 
     # Convert translated text to speech
-    tts_audio_data = text_to_speech(client, ts_text)
+    st.session_state.tts_audio_data = text_to_speech(client, st.session_state.ts_text)
 
     st.session_state.is_recording = False
 
 if st.session_state.once_recording == True:
     st.write("Transcription:")
-    st.write(transcription)
-    st.audio(file_path, format='audio/webm')
+    st.write(st.session_state.transcription)
+    st.audio(st.session_state.file_path, format='audio/webm')
 
     st.write("Translation:")
-    st.write(ts_text)
+    st.write(st.session_state.ts_text)
     # Automatically play the TTS audio if available
-    st.audio(tts_audio_data, format='audio/mp3', autoplay=True)
+    st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
 
     # Delete temporary files
-    os.remove(file_path)
-    os.remove(tts_audio_data)
+    os.remove(st.session_state.file_path)
+    os.remove(st.session_state.tts_audio_data)
 
