@@ -67,7 +67,7 @@ if 'is_recording' not in st.session_state:
 selected_language = st.selectbox('Language', languages, index=1)
 
 
-audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
+audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=state_recode)
 
 if st.session_state.is_recording == True:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
