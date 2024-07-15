@@ -61,13 +61,10 @@ if 'selected_language' not in st.session_state:
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
 
-# Check if the selected language has changed
-if selected_language != st.session_state.selected_language:
-    st.session_state.selected_language = selected_language
 
 audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm")
 
-if audio:
+if audio and selected_language == st.session_state.selected_language:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         tmp_wav_file.write(audio["bytes"])
         tmp_wav_file.flush()
@@ -90,3 +87,7 @@ if audio:
     # Delete temporary files
     os.remove(file_path)
     os.remove(tts_audio_data)
+
+# Check if the selected language has changed
+if selected_language != st.session_state.selected_language:
+    st.session_state.selected_language = selected_language
