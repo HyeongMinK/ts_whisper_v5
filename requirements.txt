@@ -1,5 +1,6 @@
 streamlit
 streamlit-mic-recorder
+streamlit_ace
 openai-whisper
 soundfile
 av
