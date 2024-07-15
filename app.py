@@ -17,7 +17,6 @@ def load_whisper_model():
 model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
 client = OpenAI(api_key=api_key)
-st.text_area("Write your notes here:", height=400)
 if not api_key:
     raise ValueError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
 
@@ -51,6 +50,7 @@ def text_to_speech(client, text):
 st.title("Streamlit Audio Translator")
 
 st.write("Select the language of the translation result and click Start!")
+st.text_area("Write your notes here:", height=200)
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
