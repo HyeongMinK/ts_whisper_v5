@@ -128,6 +128,11 @@ if st.session_state.once_recording == True:
                 st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
             
             with col2:
+                if st.button("Listen to all saved audio"):
+                    for i in range(len(st.session_state.transcriptions)):
+                        st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
+
+
                 excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
 
                 if excluded_list:
