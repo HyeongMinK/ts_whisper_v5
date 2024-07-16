@@ -130,7 +130,7 @@ if st.session_state.once_recording == True:
     for i in range(len(st.session_state.transcriptions)):
         button_label = f"{i+1}: {st.session_state.transcriptions[i][:12]} .."
         button_key = f"custom_button_{i}"
-        if st.sidebar.button(button_label, key=button_key):
+        if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
 
     for i in range(len(st.session_state.transcriptions)):
