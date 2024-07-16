@@ -125,7 +125,7 @@ if st.session_state.once_recording == True:
           excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
           
           #change audio order
-          change_option = st.selectbox("Reorder recordings", excluded_list)
+          change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder= "Select the position to move the audio to")
 
       
 
