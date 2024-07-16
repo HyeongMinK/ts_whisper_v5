@@ -76,7 +76,7 @@ if 'once_recording' not in st.session_state:
 if 'temp_page' not in st.session_state:
     st.session_state.temp_page = 0
 
-selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
@@ -142,7 +142,6 @@ if st.session_state.once_recording == True:
                 st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
             
             with col2:
-                st.empty()
                 if st.button("Listen to all saved audio"):
                     audio_files = [st.session_state.tts_audio_data[i] for i in range(len(st.session_state.tts_audio_data))]
                     merged_audio = merge_audios_with_silence(audio_files)
