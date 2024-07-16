@@ -135,6 +135,7 @@ if st.session_state.once_recording == True:
                   del st.session_state.tts_audio_data[i]
                   if st.session_state.temp_page > len(st.session_state.transcriptions):
                       st.session_state.temp_page -= 1
+                  st.rerun()
 
       
 
