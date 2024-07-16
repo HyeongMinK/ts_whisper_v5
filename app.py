@@ -73,7 +73,7 @@ if 'once_recording' not in st.session_state:
     st.session_state.once_recording = False
 
 if 'temp_page' not in st.session_state:
-    st.session_state.temp_page = 1
+    st.session_state.temp_page = 0
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
