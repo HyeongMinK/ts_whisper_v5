@@ -109,7 +109,7 @@ st.sidebar.title("Recordings")
 if st.session_state.once_recording == True:
     # Sidebar with numbered recordings
     for i in range(len(st.session_state.transcriptions)):
-        button_label = f"{i+1}. {st.session_state.transcriptions[i][:10]} .."
+        button_label = str(i+1)+f"{.st.session_state.transcriptions[i][:10]} .."
         if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
 
