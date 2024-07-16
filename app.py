@@ -45,6 +45,7 @@ def text_to_speech(client, text):
         tmp_file_name = tmp_audio_file.name
     
     return tmp_file_name
+
 def state_recode():
     st.session_state.is_recording = True
 
@@ -62,9 +63,21 @@ if 'is_recording' not in st.session_state:
 if 'once_recording' not in st.session_state:
     st.session_state.once_recording = False
 
+if 'temp_page' not in st.session_state:
+    st.session_state.temp_page = 1
+
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
 
+# Initialize session state lists
+if 'transcriptions' not in st.session_state:
+    st.session_state.transcriptions = []
+if 'file_paths' not in st.session_state:
+    st.session_state.file_paths = []
+if 'ts_texts' not in st.session_state:
+    st.session_state.ts_texts = []
+if 'tts_audio_data' not in st.session_state:
+    st.session_state.tts_audio_data = []
 
 audio = mic_recorder(start_prompt="Start", stop_prompt="Stop", format="webm", callback=state_recode)
 
@@ -74,25 +87,37 @@ if st.session_state.is_recording == True:
         tmp_wav_file.write(audio["bytes"])
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
-    st.session_state.transcription = transcribe_audio(st.session_state.file_path)
-    st.session_state.ts_text = gpt_call(client, st.session_state.transcription, selected_language)
+    transcription = transcribe_audio(st.session_state.file_path)
+    ts_text = gpt_call(client, transcription, selected_language)
 
     # Convert translated text to speech
-    st.session_state.tts_audio_data = text_to_speech(client, st.session_state.ts_text)
+    tts_audio = text_to_speech(client, ts_text)
+
+    # Append results to session state lists
+    st.session_state.transcriptions.append(transcription)
+    st.session_state.file_paths.append(st.session_state.file_path)
+    st.session_state.ts_texts.append(ts_text)
+    st.session_state.tts_audio_data.append(tts_audio)
 
     st.session_state.is_recording = False
 
 if st.session_state.once_recording == True:
-    st.write("Transcription:")
-    st.write(st.session_state.transcription)
-    st.audio(st.session_state.file_path, format='audio/webm')
+  # Sidebar with numbered recordings
+  st.sidebar.title("Recordings")
+  for i in range(len(st.session_state.transcriptions)):
+      if st.session_state.temp_page==i+1:
+          st.write(f"Transcription {i+1}:")
+          st.write(st.session_state.transcriptions[i])
+          st.audio(st.session_state.file_paths[i], format='audio/webm')
 
-    st.write("Translation:")
-    st.write(st.session_state.ts_text)
-    # Automatically play the TTS audio if available
-    st.audio(st.session_state.tts_audio_data, format='audio/mp3', autoplay=True)
+          st.write(f"Translation {i+1}:")
+          st.write(st.session_state.ts_texts[i])
+          st.audio(st.session_state.tts_audio_data[i], format='audio/mp3')
 
-    # Delete temporary files
-    #os.remove(st.session_state.file_path)
-    #os.remove(st.session_state.tts_audio_data)
+      if st.sidebar.button(f"Recording {i+1}"):
+          st.session_state.temp_page=i+1
+      
 
+    # Delete temporary files if needed
+    #os.remove(st.session_state.file_paths[-1])
+    #os.remove(st.session_state.tts_audio_data[-1])
