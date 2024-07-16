@@ -29,7 +29,7 @@ def gpt_call(client, text, selected_language):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": f"Your only task is to translate to {selected_language}. Do not provide me with anything other than the translation for the given input. 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 이렇게 하는 것은 아주 잘못 된 예시야"},
+            {"role": "system", "content": f"Your only task is to translate to {selected_language}. Do not provide me with anything other than the translation for the given input. 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 이렇게 하는 것은 아주 잘못 된 예시야 그리고 번역 한 문장은 좀 아카데믹컬 해야만 해"},
             {"role": "user", "content": text}
         ]
     )
