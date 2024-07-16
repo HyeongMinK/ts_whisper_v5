@@ -116,7 +116,7 @@ if st.session_state.once_recording == True:
 
     for i in range(len(st.session_state.transcriptions)):
         if st.session_state.temp_page == i+1:
-            col1, col2 = st.columns([1, 1])
+            col1, col2 = st.columns([2, 1])
             
             with col1:
                 st.write(f"Transcription {i+1}:")
@@ -132,7 +132,7 @@ if st.session_state.once_recording == True:
 
                 if excluded_list:
                     # Change audio order
-                    change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position to move the audio to")
+                    change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position")
 
                     # Move the recording
                     if change_option:
