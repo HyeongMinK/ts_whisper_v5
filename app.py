@@ -111,6 +111,7 @@ if st.session_state.once_recording == True:
       if st.sidebar.button(f"Recording {i+1}"):
           st.session_state.temp_page=i+1
 
+  for i in range(len(st.session_state.transcriptions)):
       if st.session_state.temp_page==i+1:
           st.write(f"Transcription {i+1}:")
           st.write(st.session_state.transcriptions[i])
