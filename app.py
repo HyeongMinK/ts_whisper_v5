@@ -27,7 +27,7 @@ def transcribe_audio(file_path):
 
 def gpt_call(client, text, selected_language, selected_tone):
     content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
-    if selected_tone == "Politely and Academically"
+    if selected_tone == "Politely and Academically":
         content += "and Second, the tone of the translated sentences must be very polite"
     completion = client.chat.completions.create(
         model="gpt-4o",
