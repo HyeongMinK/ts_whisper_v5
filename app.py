@@ -107,28 +107,28 @@ if st.session_state.is_recording == True:
 st.sidebar.title("Recordings")
 
 if st.session_state.once_recording == True:
-    # Custom CSS to highlight the selected button
-    st.markdown("""
-        <style>
-        .highlighted-button {
-            background-color: #FF4B4B !important;
-            color: white !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+  # Sidebar with numbered recordings
+  for i in range(len(st.session_state.transcriptions)):
+      if st.sidebar.button(f"Recording {i+1}"):
+          st.session_state.temp_page=i+1
 
-    # Sidebar with numbered recordings
-    for i in range(len(st.session_state.transcriptions)):
-        button_class = "highlighted-button" if st.session_state.temp_page == i + 1 else ""
-        if st.sidebar.button(f"Recording {i+1}", key=f"btn_{i+1}", on_click=lambda idx=i+1: st.session_state.update(temp_page=idx)):
-            st.session_state.temp_page = i + 1
+  for i in range(len(st.session_state.transcriptions)):
+      if st.session_state.temp_page==i+1:
+          st.write(f"Transcription {i+1}:")
+          st.write(st.session_state.transcriptions[i])
+          st.audio(st.session_state.file_paths[i], format='audio/webm')
 
-    for i in range(len(st.session_state.transcriptions)):
-        if st.session_state.temp_page == i + 1:
-            st.write(f"Transcription {i+1}:")
-            st.write(st.session_state.transcriptions[i])
-            st.audio(st.session_state.file_paths[i], format='audio/webm')
+          st.write(f"Translation {i+1}:")
+          st.write(st.session_state.ts_texts[i])
+          st.audio(st.session_state.tts_audio_data[i], format='audio/mp3',autoplay=True)
 
-            st.write(f"Translation {i+1}:")
-            st.write(st.session_state.ts_texts[i])
-            st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
+          excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
+          
+          #change audio order
+          change_option = st.selectbox("Reorder recordings", excluded_list)
+
+      
+
+    # Delete temporary files if needed
+    #os.remove(st.session_state.file_paths[-1])
+    #os.remove(st.session_state.tts_audio_data[-1])
