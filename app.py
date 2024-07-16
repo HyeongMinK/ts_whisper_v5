@@ -112,7 +112,7 @@ if st.session_state.once_recording == True:
         """
         <style>
         .custom-button {
-            font-size: 16px !important; /* Adjust the font size as needed */
+            font-size: 12px !important; /* Adjust the font size as needed */
             background-color: #f0f0f0; /* Button background color */
             border: none; /* Button border */
             padding: 10px 20px; /* Button padding */
