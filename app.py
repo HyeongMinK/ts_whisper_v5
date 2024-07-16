@@ -25,11 +25,14 @@ def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
     return result['text']
 
-def gpt_call(client, text, selected_language):
+def gpt_call(client, text, selected_language, selected_tone):
+    content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
+    if selected_tone == "Politely and Academically"
+        content += "and Second, the tone of the translated sentences must be very polite"
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example, and Second, the tone of the translated sentences must be very polite"},
+            {"role": "system", "content": content},
             {"role": "user", "content": text}
         ]
     )
@@ -101,7 +104,7 @@ if st.session_state.is_recording == True:
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
-    ts_text = gpt_call(client, transcription, selected_language)
+    ts_text = gpt_call(client, transcription, selected_language, selected_tone)
 
     # Convert translated text to speech
     tts_audio = text_to_speech(client, ts_text)
