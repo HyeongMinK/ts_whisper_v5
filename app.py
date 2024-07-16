@@ -66,6 +66,7 @@ st.text_area("Write your notes here:", height=200)
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
+tones = ['Default', 'Politely and Academically']
 if 'is_recording' not in st.session_state:
     st.session_state.is_recording = False
 
@@ -77,6 +78,8 @@ if 'temp_page' not in st.session_state:
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
+
+selected_tone = st.radio(label="Choose Tone", options=tones, index=0, horizontal = True)
 
 # Initialize session state lists
 if 'transcriptions' not in st.session_state:
