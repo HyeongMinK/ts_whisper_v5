@@ -119,7 +119,7 @@ if st.session_state.once_recording == True:
 
 
     for i in range(len(st.session_state.transcriptions)):
-        button_label = f"{i+1}: {st.session_state.transcriptions[i][:12]} .."
+        button_label = f"R{i+1}: {st.session_state.transcriptions[i][:12]} .."
         if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
 
@@ -143,7 +143,7 @@ if st.session_state.once_recording == True:
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
                         merged_audio.export(tmp_file.name, format="mp3")
                         tmp_file_path = tmp_file.name
-                    st.audio(tmp_file_path, format='audio/mp3')
+                    st.audio(tmp_file_path, format='audio/mp3', autoplay=True)
 
 
                 excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
