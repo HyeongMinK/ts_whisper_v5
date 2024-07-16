@@ -10,7 +10,7 @@ import warnings
 st.markdown(
         """
         <style>.element-container:has(#button-after) + div button {
-            font-size: 12px !important; /* Adjust the font size as needed */
+            font-size: 25px !important; /* Adjust the font size as needed */
             background-color: #f0f0f0; /* Button background color */
             border: none; /* Button border */
             padding: 10px 20px; /* Button padding */
