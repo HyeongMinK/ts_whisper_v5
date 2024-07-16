@@ -116,7 +116,7 @@ if st.session_state.once_recording == True:
 
     for i in range(len(st.session_state.transcriptions)):
         if st.session_state.temp_page == i+1:
-            col1, col2 = st.columns([3, 1])
+            col1, col2 = st.columns([2, 1])
             
             with col1:
                 st.write(f"Transcription {i+1}:")
