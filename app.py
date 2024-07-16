@@ -88,7 +88,7 @@ if 'ts_texts' not in st.session_state:
 if 'tts_audio_data' not in st.session_state:
     st.session_state.tts_audio_data = []
 
-audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
+audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
