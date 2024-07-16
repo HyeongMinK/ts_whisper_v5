@@ -128,6 +128,16 @@ if st.session_state.once_recording == True:
                 # Change audio order
                 change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position to move the audio to")
 
+                # Move the recording
+                if change_option:
+                    change_option -= 1
+                    st.session_state.transcriptions.insert(change_option, st.session_state.transcriptions.pop(i))
+                    st.session_state.file_paths.insert(change_option, st.session_state.file_paths.pop(i))
+                    st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
+                    st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
+                    st.session_state.temp_page = change_option + 1
+                    st.rerun()
+
             if 'delete_confirm' not in st.session_state:
                 st.session_state.delete_confirm = False
 
