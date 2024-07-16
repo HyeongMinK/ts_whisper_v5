@@ -116,7 +116,7 @@ if st.session_state.once_recording == True:
             background-color: #f0f0f0; /* Button background color */
             border: none; /* Button border */
             padding: 10px 20px; /* Button padding */
-            margin: 5px 0; /* Button margin */
+            margin: 2px 0; /* Button margin */
             cursor: pointer; /* Cursor on hover */
         }
         .custom-button:hover {
