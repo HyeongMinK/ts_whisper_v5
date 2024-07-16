@@ -157,28 +157,14 @@ if st.session_state.once_recording == True:
 
                 excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
 
-                if excluded_list:
-                    # Change audio order
-                    change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position")
-
-                    # Move the recording
-                    if change_option:
-                        change_option -= 1
-                        st.session_state.transcriptions.insert(change_option, st.session_state.transcriptions.pop(i))
-                        st.session_state.file_paths.insert(change_option, st.session_state.file_paths.pop(i))
-                        st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
-                        st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
-                        st.session_state.temp_page = change_option + 1
-                        st.rerun()
-
                 if 'delete_confirm' not in st.session_state:
                     st.session_state.delete_confirm = False
 
-                if st.button("Delete Recording"):
+                if st.button("Delete current recording"):
                     st.session_state.delete_confirm = True
 
                 if st.session_state.delete_confirm:
-                    st.warning("정말 삭제하시겠습니까?")
+                    st.warning("Are you sure you want to delete it?")
                     if st.button("Yes, delete it"):
                         del st.session_state.transcriptions[i]
                         del st.session_state.file_paths[i]
@@ -191,6 +177,20 @@ if st.session_state.once_recording == True:
                     if st.button("No, keep it"):
                         st.session_state.delete_confirm = False
                         st.rerun()
+
+                if excluded_list:
+                    # Change audio order
+                    change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position")
+
+                    # Move the recording
+                    if change_option:
+                        change_option -= 1
+                        st.session_state.transcriptions.insert(change_option, st.session_state.transcriptions.pop(i))
+                        st.session_state.file_paths.insert(change_option, st.session_state.file_paths.pop(i))
+                        st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
+                        st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
+                        st.session_state.temp_page = change_option + 1
+                        st.rerun()                    
 
 
       
