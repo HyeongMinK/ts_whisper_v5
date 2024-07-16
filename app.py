@@ -147,6 +147,7 @@ if st.session_state.once_recording == True:
                     st.rerun()
                 if st.button("No, keep it"):
                     st.session_state.delete_confirm = False
+                    st.rerun()
 
 
       
