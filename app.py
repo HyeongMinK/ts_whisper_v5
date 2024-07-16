@@ -6,6 +6,25 @@ from openai import OpenAI
 import os
 import warnings
 
+# Custom CSS for specific buttons
+st.markdown(
+        """
+        <style>.element-container:has(#button-after) + div button {
+            font-size: 12px !important; /* Adjust the font size as needed */
+            background-color: #f0f0f0; /* Button background color */
+            border: none; /* Button border */
+            padding: 10px 20px; /* Button padding */
+            margin: 2px 0; /* Button margin */
+            cursor: pointer; /* Cursor on hover */
+        }
+        .custom-button:hover {
+            background-color: #e0e0e0; /* Button background color on hover */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+)
+
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
@@ -107,24 +126,7 @@ if st.session_state.is_recording == True:
 st.sidebar.title("Recordings")
 
 if st.session_state.once_recording == True:
-    # Custom CSS for specific buttons
-    st.markdown(
-        """
-        <style>.element-container:has(#button-after) + div button {
-            font-size: 12px !important; /* Adjust the font size as needed */
-            background-color: #f0f0f0; /* Button background color */
-            border: none; /* Button border */
-            padding: 10px 20px; /* Button padding */
-            margin: 2px 0; /* Button margin */
-            cursor: pointer; /* Cursor on hover */
-        }
-        .custom-button:hover {
-            background-color: #e0e0e0; /* Button background color on hover */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+
 
     for i in range(len(st.session_state.transcriptions)):
         button_label = f"{i+1}: {st.session_state.transcriptions[i][:12]} .."
