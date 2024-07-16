@@ -142,8 +142,8 @@ if st.session_state.once_recording == True:
                 st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
             
             with col2:
-                st.write("")
-                st.write("")
+                st.write(" ")
+                st.write(" ")
                 if st.button("Listen to all saved audio"):
                     audio_files = [st.session_state.tts_audio_data[i] for i in range(len(st.session_state.tts_audio_data))]
                     merged_audio = merge_audios_with_silence(audio_files)
