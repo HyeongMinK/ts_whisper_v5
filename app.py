@@ -119,7 +119,7 @@ if st.session_state.once_recording == True:
 
           st.write(f"Translation {i+1}:")
           st.write(st.session_state.ts_texts[i])
-          st.audio(st.session_state.tts_audio_data[i], format='audio/mp3')
+          st.audio(st.session_state.tts_audio_data[i], format='audio/mp3',autoplay=True)
 
       
 
