@@ -110,8 +110,7 @@ if st.session_state.once_recording == True:
     # Custom CSS for specific buttons
     st.markdown(
         """
-        <style>
-        .custom-button {
+        <style>.element-container:has(#button-after) + div button {
             font-size: 12px !important; /* Adjust the font size as needed */
             background-color: #f0f0f0; /* Button background color */
             border: none; /* Button border */
@@ -130,6 +129,7 @@ if st.session_state.once_recording == True:
     for i in range(len(st.session_state.transcriptions)):
         button_label = f"{i+1}: {st.session_state.transcriptions[i][:12]} .."
         button_key = f"custom_button_{i}"
+        st.markdown('<span id="button-after"></span>', unsafe_allow_html=True)
         if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
 
