@@ -112,6 +112,7 @@ if st.session_state.is_recording == True:
     st.session_state.temp_page+=1
 
     st.session_state.is_recording = False
+    st.rerun
 
 st.sidebar.title("Recordings")
 
