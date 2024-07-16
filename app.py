@@ -94,13 +94,13 @@ if st.session_state.is_recording == True:
     tts_audio = text_to_speech(client, ts_text)
 
     # Append results to session state lists
-    st.session_state.transcriptions.append(transcription)
-    st.session_state.file_paths.append(st.session_state.file_path)
-    st.session_state.ts_texts.append(ts_text)
-    st.session_state.tts_audio_data.append(tts_audio)
+    st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
+    st.session_state.file_paths.insert(st.session_state.temp_page,st.session_state.file_path)
+    st.session_state.ts_texts.insert(st.session_state.temp_page,ts_text)
+    st.session_state.tts_audio_data.insert(st.session_state.temp_page,tts_audio)
 
     #temp_Page
-    st.session_state.temp_page=len(st.session_state.tts_audio_data)
+    st.session_state.temp_page+=1
 
     st.session_state.is_recording = False
 
