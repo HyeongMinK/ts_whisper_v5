@@ -116,50 +116,54 @@ if st.session_state.once_recording == True:
 
     for i in range(len(st.session_state.transcriptions)):
         if st.session_state.temp_page == i+1:
-            st.write(f"Transcription {i+1}:")
-            st.write(st.session_state.transcriptions[i])
-            st.audio(st.session_state.file_paths[i], format='audio/webm')
+            col1, col2 = st.columns([3, 1])
+            
+            with col1:
+                st.write(f"Transcription {i+1}:")
+                st.write(st.session_state.transcriptions[i])
+                st.audio(st.session_state.file_paths[i], format='audio/webm')
 
-            st.write(f"Translation {i+1}:")
-            st.write(st.session_state.ts_texts[i])
-            st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
+                st.write(f"Translation {i+1}:")
+                st.write(st.session_state.ts_texts[i])
+                st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
+            
+            with col2:
+                excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
 
-            excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
+                if excluded_list:
+                    # Change audio order
+                    change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position to move the audio to")
 
-            if excluded_list:
-                # Change audio order
-                change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder="Select the position to move the audio to")
+                    # Move the recording
+                    if change_option:
+                        change_option -= 1
+                        st.session_state.transcriptions.insert(change_option, st.session_state.transcriptions.pop(i))
+                        st.session_state.file_paths.insert(change_option, st.session_state.file_paths.pop(i))
+                        st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
+                        st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
+                        st.session_state.temp_page = change_option + 1
+                        st.rerun()
 
-                # Move the recording
-                if change_option:
-                    change_option -= 1
-                    st.session_state.transcriptions.insert(change_option, st.session_state.transcriptions.pop(i))
-                    st.session_state.file_paths.insert(change_option, st.session_state.file_paths.pop(i))
-                    st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
-                    st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
-                    st.session_state.temp_page = change_option + 1
-                    st.rerun()
-
-            if 'delete_confirm' not in st.session_state:
-                st.session_state.delete_confirm = False
-
-            if st.button("Delete Recording"):
-                st.session_state.delete_confirm = True
-
-            if st.session_state.delete_confirm:
-                st.warning("정말 삭제하시겠습니까?")
-                if st.button("Yes, delete it"):
-                    del st.session_state.transcriptions[i]
-                    del st.session_state.file_paths[i]
-                    del st.session_state.ts_texts[i]
-                    del st.session_state.tts_audio_data[i]
+                if 'delete_confirm' not in st.session_state:
                     st.session_state.delete_confirm = False
-                    if st.session_state.temp_page > len(st.session_state.transcriptions):
-                        st.session_state.temp_page -= 1
-                    st.rerun()
-                if st.button("No, keep it"):
-                    st.session_state.delete_confirm = False
-                    st.rerun()
+
+                if st.button("Delete Recording"):
+                    st.session_state.delete_confirm = True
+
+                if st.session_state.delete_confirm:
+                    st.warning("정말 삭제하시겠습니까?")
+                    if st.button("Yes, delete it"):
+                        del st.session_state.transcriptions[i]
+                        del st.session_state.file_paths[i]
+                        del st.session_state.ts_texts[i]
+                        del st.session_state.tts_audio_data[i]
+                        st.session_state.delete_confirm = False
+                        if st.session_state.temp_page > len(st.session_state.transcriptions):
+                            st.session_state.temp_page -= 1
+                        st.rerun()
+                    if st.button("No, keep it"):
+                        st.session_state.delete_confirm = False
+                        st.rerun()
 
 
       
