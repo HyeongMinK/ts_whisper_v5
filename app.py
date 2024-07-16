@@ -128,6 +128,14 @@ if st.session_state.once_recording == True:
               #change audio order
               change_option = st.selectbox("Reorder recordings", excluded_list, index=None, placeholder= "Select the position to move the audio to")
 
+              if st.button("Delete Recording"):
+                  del st.session_state.transcriptions[i]
+                  del st.session_state.file_paths[i]
+                  del st.session_state.ts_texts[i]
+                  del st.session_state.tts_audio_data[i]
+                  if st.session_state.temp_page > len(st.session_state.transcriptions):
+                      st.session_state.temp_page -= 1
+
       
 
     # Delete temporary files if needed
