@@ -99,12 +99,18 @@ if st.session_state.is_recording == True:
     st.session_state.ts_texts.append(ts_text)
     st.session_state.tts_audio_data.append(tts_audio)
 
+    #temp_Page
+    st.session_state.temp_page=len(st.session_state.tts_audio_data)
+
     st.session_state.is_recording = False
 
 if st.session_state.once_recording == True:
   # Sidebar with numbered recordings
   st.sidebar.title("Recordings")
   for i in range(len(st.session_state.transcriptions)):
+      if st.sidebar.button(f"Recording {i+1}"):
+          st.session_state.temp_page=i+1
+
       if st.session_state.temp_page==i+1:
           st.write(f"Transcription {i+1}:")
           st.write(st.session_state.transcriptions[i])
@@ -114,8 +120,6 @@ if st.session_state.once_recording == True:
           st.write(st.session_state.ts_texts[i])
           st.audio(st.session_state.tts_audio_data[i], format='audio/mp3')
 
-      if st.sidebar.button(f"Recording {i+1}"):
-          st.session_state.temp_page=i+1
       
 
     # Delete temporary files if needed
