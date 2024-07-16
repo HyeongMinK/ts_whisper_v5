@@ -107,10 +107,21 @@ if st.session_state.is_recording == True:
 st.sidebar.title("Recordings")
 
 if st.session_state.once_recording == True:
+  # Custom CSS for specific buttons
+  st.markdown(
+      """
+      <style>
+      .custom-button {
+          font-size: 16px !important; /* Adjust the font size as needed */
+      }
+      </style>
+      """,
+      unsafe_allow_html=True
+  )
     # Sidebar with numbered recordings
     for i in range(len(st.session_state.transcriptions)):
         button_label = f"{i+1}: {st.session_state.transcriptions[i][:12]} .."
-        if st.sidebar.button(button_label):
+        if st.sidebar.markdown(f'<button class="custom-button">{button_label}</button>', unsafe_allow_html=True):
             st.session_state.temp_page = i+1
 
     for i in range(len(st.session_state.transcriptions)):
