@@ -5,6 +5,7 @@ import tempfile
 from openai import OpenAI
 import os
 import warnings
+from pydub import AudioSegment
 
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
@@ -48,6 +49,14 @@ def text_to_speech(client, text):
 
 def state_recode():
     st.session_state.is_recording = True
+
+def merge_audios_with_silence(audio_files, silence_duration=1000):
+    combined = AudioSegment.empty()
+    silence = AudioSegment.silent(duration=silence_duration)
+    for audio_file in audio_files:
+        combined += AudioSegment.from_file(audio_file) + silence
+    return combined
+
 
 # Streamlit interface
 st.title("Streamlit Audio Translator")
@@ -129,8 +138,12 @@ if st.session_state.once_recording == True:
             
             with col2:
                 if st.button("Listen to all saved audio"):
-                    for i in range(len(st.session_state.transcriptions)):
-                        st.audio(st.session_state.tts_audio_data[i], format='audio/mp3', autoplay=True)
+                    audio_files = [st.session_state.tts_audio_data[i] for i in range(len(st.session_state.tts_audio_data))]
+                    merged_audio = merge_audios_with_silence(audio_files)
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
+                        merged_audio.export(tmp_file.name, format="mp3")
+                        tmp_file_path = tmp_file.name
+                    st.audio(tmp_file_path, format='audio/mp3')
 
 
                 excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
