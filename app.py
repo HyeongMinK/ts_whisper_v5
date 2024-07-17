@@ -164,6 +164,7 @@ with col2_file_uploader:
     if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
 
         st.session_state.uploader = False
+        st.session_state.uploader_list = uploaded_files
 
         for uploaded_file in uploaded_files:
             # 파일을 저장할 경로 설정
@@ -214,6 +215,26 @@ with col2_file_uploader:
 
     elif st.session_state.uploader and len(uploaded_files)<len(st.session_state.uploader_list):
         st.session_state.uploader = False
+        unique_to_list = list(set(st.session_state.uploader_list)-set(uploaded_files))
+        st.session_state.uploader_list = uploaded_files
+
+        # OpenAI API를 통해 파일 리스트 조회
+        try:
+            file_list = client.files.list()
+            file_list_data = file_list
+            vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
+
+            # unique_to_list에 있는 파일들 openai에서 삭제
+            for file_name in unique_to_list:
+                for file in file_list_data:
+                    if file.filename == file_name:                    client.beta.vector_stores.files.delete(vector_store_id="st.session_state.vector_store_id",file_id=file.id)
+                        client.files.delete(file.id)
+                        st.write(f"OpenAI에서 파일 삭제: {file_name}")
+
+            except Exception as e:
+                st.write(f"파일 삭제 중 오류가 발생했습니다: {file_name}")
+                st.write(e)
+
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
