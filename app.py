@@ -195,12 +195,6 @@ with col2_file_uploader:
                         vector_store_id=st.session_state.vector_store_id,
                         file_id=file_id
                     )
-                    
-                    # 벡터 스토어 업로드 결과 확인
-                    if vector_store_response.get("success"):
-                        st.write(f"벡터 스토어에 파일 업로드 성공: {file_id}")
-                    else:
-                        st.write(f"벡터 스토어에 파일 업로드 실패: {file_id}")
                 except Exception as ve:
                     st.write(f"벡터 스토어 업로드 중 오류 발생: {file_id}")
                     st.write(ve)
