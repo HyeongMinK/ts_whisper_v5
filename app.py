@@ -217,7 +217,7 @@ with col2_file_uploader:
         st.session_state.uploader = False
         unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
         st.session_state.uploader_list = uploaded_files
-        st.write(f"OpenAI에서 파일 삭제: {unique_to_list.name}")
+        st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
         # OpenAI API를 통해 파일 리스트 조회
         try:
             file_list = client.files.list()
@@ -225,13 +225,13 @@ with col2_file_uploader:
             vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
 
             for file in file_list_data:
-                if file.filename == unique_to_list.name:
+                if file.filename == unique_to_list[0].name:
                     client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
                     client.files.delete(file.id)
-                    st.write(f"OpenAI에서 파일 삭제: {unique_to_list.name}")
+                    st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
 
         except Exception as e:
-            st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list.name}")
+            st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
             st.write(e)
 
 
