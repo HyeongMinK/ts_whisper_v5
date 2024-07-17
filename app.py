@@ -57,6 +57,12 @@ if 'thread_id' not in st.session_state:
 
 if 'assistant_id' not in st.session_state:
     st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
+
+if 'uploader' not in st.session_state:
+    st.session_state.uploader = False
+
+def state_uploader():
+    st.session_state.uploader = True
     
 
 # Initialize session state lists
@@ -150,8 +156,12 @@ col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
 with col2_file_uploader:
-    uploaded_files= st.file_uploader("Upload File", accept_multiple_files=True)
-    if uploaded_files:
+    uploaded_files= st.file_uploader("Upload File", accept_multiple_files=True, on_change = state_uploader)
+
+    if st.session_state.uploader:
+
+        st.session_state.uploader = False
+
         for uploaded_file in uploaded_files:
             # 파일을 저장할 경로 설정
             file_path = uploaded_file.name
