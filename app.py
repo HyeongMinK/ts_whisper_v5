@@ -232,9 +232,9 @@ with col2_file_uploader:
                         client.files.delete(file.id)
                         st.write(f"OpenAI에서 파일 삭제: {file_name}")
 
-            except Exception as e:
-                st.write(f"파일 삭제 중 오류가 발생했습니다: {file_name}")
-                st.write(e)
+         except Exception as e:
+             st.write(f"파일 삭제 중 오류가 발생했습니다: {file_name}")
+             st.write(e)
 
 
 # 언어 선택 박스 (기본값을 영어로 설정)
