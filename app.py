@@ -69,8 +69,20 @@ def text_to_speech(client, text):
     
     return tmp_file_name
 
+def delete_files(i):
+    del st.session_state.transcriptions[i]
+    del st.session_state.file_paths[i]
+    del st.session_state.ts_texts[i]
+    del st.session_state.tts_audio_data[i]
+
 def state_recode():
     st.session_state.is_recording = True
+
+def state_re_recode():
+    st.session_state.is_recording = True
+    st.session_state.temp_page-=1
+    delete_files(st.session_state.temp_page)
+
 
 def merge_audios_with_silence(audio_files, silence_duration=1000):
     combined = AudioSegment.empty()
@@ -79,11 +91,6 @@ def merge_audios_with_silence(audio_files, silence_duration=1000):
         combined += AudioSegment.from_file(audio_file) + silence
     return combined
 
-def delete_files(i):
-    del st.session_state.transcriptions[i]
-    del st.session_state.file_paths[i]
-    del st.session_state.ts_texts[i]
-    del st.session_state.tts_audio_data[i]
 
 
 # Streamlit interface
@@ -103,6 +110,9 @@ selected_language = st.selectbox('Language', languages, index=1)
 
 
 audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
+
+if st.session_state.transcriptions:
+    audio_re = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
