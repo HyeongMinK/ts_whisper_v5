@@ -123,7 +123,7 @@ if st.session_state.is_recording == True:
 
 st.sidebar.title("Recordings")
 
-if st.session_state.once_recording == True and not st.session_state.transcriptions:
+if st.session_state.once_recording == True and st.session_state.transcriptions:
 
 
     for i in range(len(st.session_state.transcriptions)):
