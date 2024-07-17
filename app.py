@@ -40,8 +40,8 @@ if 'thread_id' not in st.session_state:
     # 스레드의 메시지 목록을 불러오기
     messages = client.beta.threads.messages.list(thread_id=st.session_state.thread_id)
     # 메시지 목록에서 모든 메시지 삭제하기
-    for message in messages['data']:
-        message_id = message['id']
+    for message in messages:
+        message_id = message.id
         deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
     
     # 메시지 삭제 후 다시 메시지 목록을 불러와 확인하기
