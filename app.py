@@ -7,6 +7,33 @@ import os
 import warnings
 from pydub import AudioSegment
 
+# 모든 파일을 삭제하는 함수
+def delete_all_files(vector_store_id, file_list):
+    for file in file_list['data']:
+        file_id = file['id']
+        response = client.beta.vector_stores.files.delete(vector_store_id=vector_store_id, file_id=file_id)
+
+
+# Initialize openai assistent
+if 'vector_store_id' not in st.session_state:
+    st.session_state.vector_store_id = "vs_bHT7TcS6HrVHAYcNgeh48lKE"
+    vector_store_files = client.beta.vector_stores.files.list(vector_store_id=vector_store_id)
+    # 파일 목록에서 모든 파일 삭제하기
+    delete_all_files(vector_store_id, vector_store_files)
+
+if 'thread_id' not in st.session_state:
+    st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
+    # 스레드의 메시지 목록을 불러오기
+    messages = client.beta.threads.messages.list(thread_id=thread_id)
+    # 메시지 목록에서 모든 메시지 삭제하기
+    for message in messages['data']:
+        message_id = message['id']
+        deleted_message_response = client.beta.threads.messages.delete(thread_id=thread_id, message_id=message_id)
+    
+    # 메시지 삭제 후 다시 메시지 목록을 불러와 확인하기
+    updated_messages = client.beta.threads.messages.list(thread_id=thread_id)
+    print("Updated thread messages:", updated_messages)
+
 # Initialize session state lists
 if 'transcriptions' not in st.session_state:
     st.session_state.transcriptions = []
