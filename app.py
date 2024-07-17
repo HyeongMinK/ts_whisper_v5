@@ -54,6 +54,9 @@ if 'thread_id' not in st.session_state:
     for message in messages:
         message_id = message.id
         deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
+
+if 'assistant_id' not in st.session_state:
+    st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
     
 
 # Initialize session state lists
@@ -143,7 +146,41 @@ languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', '�
 
 tones = ['Default', 'Politely and Academically']
 
-selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+col1_tone, col2_file_uploader = st.columns([1, 1])
+with col1_tone:
+    selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+with col2_file_uploader:
+    uploaded_file = st.file_uploader("Upload File", accept_multiple_files=True)
+    if uploaded_files:
+        for uploaded_file in uploaded_files:
+            # 파일을 저장할 경로 설정
+            file_path = uploaded_file.name
+        
+            # 파일을 저장
+            with open(file_path, "wb") as f:
+                f.write(uploaded_file.getbuffer())
+        
+            try:
+                # OpenAI API를 통해 파일 업로드
+                with open(file_path, "rb") as f:
+                    response = client.files.create(
+                        file=f,
+                        purpose="fine-tune"
+                    )
+            
+                # 업로드 결과 출력
+                st.write(f"파일 업로드 완료: {uploaded_file.name}")
+                st.write(response)
+            except Exception as e:
+                st.write(f"파일 업로드 중 오류가 발생했습니다: {uploaded_file.name}")
+                st.write(e)
+            finally:
+                # 로컬 파일 삭제
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
+    else:
+        st.write("업로드할 파일을 선택하세요.")
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
