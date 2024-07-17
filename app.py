@@ -99,7 +99,7 @@ def transcribe_audio(file_path):
 def gpt_call(client, text, selected_language, selected_tone):
     thread_message = client.beta.threads.messages.create("thread_nJyOZmEHQaabCI1wcOLjzgNs", role="user", content=text)    
 
-    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. If the provided files are unrelated to the user's statements, simply translate the user's statements into {selected_language} and provide them to the user"
+    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. If the provided files are unrelated to the user's statements, simply translate the user's statements into {selected_language} and provide them to the user. In this case, do not add any other words besides translating the user's input directly"
 
     if selected_tone == "Politely and Academically":
         content += "and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
