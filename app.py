@@ -186,9 +186,9 @@ with col2_file_uploader:
 
                 # 파일 이름을 기준으로 중복 체크
                 file_names = {}
-                for file in file_list['data']:
-                    filename = file['filename']
-                    file_id = file['id']
+                for file in file_list:
+                    filename = file.filename
+                    file_id = file.id
                     if filename in file_names:
                         # 중복된 파일 삭제
                         client.files.delete(file_id)
