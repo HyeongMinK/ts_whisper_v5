@@ -26,6 +26,9 @@ if 'once_recording' not in st.session_state:
 if 'temp_page' not in st.session_state:
     st.session_state.temp_page = 0
 
+if 'is_re_recording' not in st.session_state:
+    st.session_state.is_re_recording = False
+
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
@@ -82,6 +85,7 @@ def state_re_recode():
     st.session_state.is_recording = True
     st.session_state.temp_page-=1
     delete_files(st.session_state.temp_page)
+    st.session_state.is_re_recording = True
 
 
 def merge_audios_with_silence(audio_files, silence_duration=1000):
@@ -112,12 +116,17 @@ selected_language = st.selectbox('Language', languages, index=1)
 audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
 if st.session_state.transcriptions:
-    audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
+    re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
+        if st.session_state.is_re_recording == False:
+            tmp_wav_file.write(audio["bytes"])
+        else:
         tmp_wav_file.write(audio["bytes"])
+        st.session_state.is_re_recording == False
+
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
