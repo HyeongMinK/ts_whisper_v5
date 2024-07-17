@@ -125,7 +125,7 @@ if st.session_state.is_recording == True:
             tmp_wav_file.write(audio["bytes"])
         else:
             tmp_wav_file.write(re_audio["bytes"])
-            st.session_state.is_re_recording == False
+            st.session_state.is_re_recording = False
 
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
