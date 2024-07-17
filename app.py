@@ -228,10 +228,10 @@ with col2_file_uploader:
                 if file.filename == unique_to_list.name:
                     client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
                     client.files.delete(file.id)
-                    st.write(f"OpenAI에서 파일 삭제: {file_name}")
+                    st.write(f"OpenAI에서 파일 삭제: {unique_to_list.name}")
 
         except Exception as e:
-            st.write(f"파일 삭제 중 오류가 발생했습니다: {file_name}")
+            st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list.name}")
             st.write(e)
 
 
