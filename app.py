@@ -150,7 +150,7 @@ col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
 with col2_file_uploader:
-    uploaded_file = st.file_uploader("Upload File", accept_multiple_files=True)
+    uploaded_files= st.file_uploader("Upload File", accept_multiple_files=True)
     if uploaded_files:
         for uploaded_file in uploaded_files:
             # 파일을 저장할 경로 설정
