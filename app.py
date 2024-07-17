@@ -179,8 +179,6 @@ with col2_file_uploader:
                 if os.path.exists(file_path):
                     os.remove(file_path)
                     st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
-    else:
-        st.write("업로드할 파일을 선택하세요.")
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
