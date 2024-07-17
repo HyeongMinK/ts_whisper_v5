@@ -152,7 +152,20 @@ if st.session_state.once_recording == True:
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
                         merged_audio.export(tmp_file.name, format="mp3")
                         tmp_file_path = tmp_file.name
+
+                      # 임시 파일을 바이너리로 읽어오기
+                    with open(tmp_file_path, "rb") as file:
+                        audio_bytes = file.read()
+
                     st.audio(tmp_file_path, format='audio/mp3', autoplay=True)
+
+                      # 다운로드 버튼 추가
+                    st.download_button(
+                       label="Download Full Audio",
+                       data=audio_bytes,
+                       file_name="merged_audio.mp3",
+                       mime="audio/mp3"
+                     )
 
 
                 excluded_list = [j+1 for j in range(len(st.session_state.transcriptions)) if j != i]
