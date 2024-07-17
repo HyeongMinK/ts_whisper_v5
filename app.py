@@ -213,7 +213,7 @@ with col2_file_uploader:
                 st.write("중복 파일 삭제 중 오류가 발생했습니다.")
                 st.write(e)
 
-    elif st.session_state.uploader and len(uploaded_files) < len(st.session_state.uploader_list):
+    elif len(uploaded_files) < len(st.session_state.uploader_list):
         st.session_state.uploader = False
         unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
         st.session_state.uploader_list = uploaded_files
