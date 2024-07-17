@@ -112,11 +112,14 @@ selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
 
+col1_audio, col2_audio = st.columns([1, 5])
 
-audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
+with col1_audio:
+    audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
-if st.session_state.transcriptions:
-    re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
+with col2_audio:
+    if st.session_state.transcriptions:
+        re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
