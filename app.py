@@ -222,11 +222,8 @@ with col2_file_uploader:
         try:
             file_list = client.files.list()
             file_list_data = file_list
-            vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
-
             for file in file_list_data:
                 if file.filename == unique_to_list[0].name:
-                    client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
                     client.files.delete(file.id)
                     st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
 
