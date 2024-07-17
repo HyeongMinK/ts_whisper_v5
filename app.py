@@ -112,7 +112,7 @@ selected_language = st.selectbox('Language', languages, index=1)
 audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
 if st.session_state.transcriptions:
-    audio_re = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
+    audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
