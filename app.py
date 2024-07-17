@@ -191,7 +191,7 @@ with col2_file_uploader:
 
                 # 벡터 스토어에 파일 업로드
                 try:
-                    vector_store_response = client.beta.vector_stores.files.upload(
+                    vector_store_response = client.beta.vector_stores.files.create(
                         vector_store_id=st.session_state.vector_store_id,
                         file_id=file_id
                     )
