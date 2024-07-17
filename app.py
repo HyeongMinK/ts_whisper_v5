@@ -165,7 +165,7 @@ with col2_file_uploader:
                 with open(file_path, "rb") as f:
                     response = client.files.create(
                         file=f,
-                        purpose="fine-tune"
+                        purpose="assistants"
                     )
             
                 # 업로드 결과 출력
@@ -179,6 +179,25 @@ with col2_file_uploader:
                 if os.path.exists(file_path):
                     os.remove(file_path)
                     st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
+                # 중복 파일 삭제 로직
+            try:
+                # OpenAI API를 통해 파일 리스트 조회
+                file_list = client.files.list()
+
+                # 파일 이름을 기준으로 중복 체크
+                file_names = {}
+                for file in file_list['data']:
+                    filename = file['filename']
+                    file_id = file['id']
+                    if filename in file_names:
+                        # 중복된 파일 삭제
+                        client.files.delete(file_id)
+                        st.write(f"중복된 파일 삭제: {filename} (ID: {file_id})")
+                    else:
+                        file_names[filename] = file_id
+            except Exception as e:
+                st.write("중복 파일 삭제 중 오류가 발생했습니다.")
+                st.write(e)
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
