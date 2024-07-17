@@ -167,6 +167,10 @@ with col2_file_uploader:
                         file=f,
                         purpose="fine-tune"
                     )
+            
+                # 업로드 결과 출력
+                st.write(f"파일 업로드 완료: {uploaded_file.name}")
+                st.write(response)
             except Exception as e:
                 st.write(f"파일 업로드 중 오류가 발생했습니다: {uploaded_file.name}")
                 st.write(e)
@@ -174,6 +178,7 @@ with col2_file_uploader:
                 # 로컬 파일 삭제
                 if os.path.exists(file_path):
                     os.remove(file_path)
+                    st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
