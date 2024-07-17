@@ -88,7 +88,7 @@ def state_re_recode():
     st.session_state.is_re_recording = True
 
 
-def merge_audios_with_silence(audio_files, silence_duration=1000):
+def merge_audios_with_silence(audio_files, silence_duration=700):
     combined = AudioSegment.empty()
     silence = AudioSegment.silent(duration=silence_duration)
     for audio_file in audio_files:
