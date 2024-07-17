@@ -44,17 +44,17 @@ if 'vector_store_id' not in st.session_state:
     st.session_state.vector_store_id = "vs_bHT7TcS6HrVHAYcNgeh48lKE"
     vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
     # 파일 목록에서 모든 파일 삭제하기
-    #delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
-    #delete_all_files()
+    delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
+    delete_all_files()
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
     # 스레드의 메시지 목록을 불러오기
-    #messages = client.beta.threads.messages.list(thread_id=st.session_state.thread_id)
+    messages = client.beta.threads.messages.list(thread_id=st.session_state.thread_id)
     # 메시지 목록에서 모든 메시지 삭제하기
-    #for message in messages:
-        #message_id = message.id
-        #deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
+    for message in messages:
+        message_id = message.id
+        deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
 
 if 'assistant_id' not in st.session_state:
     st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
