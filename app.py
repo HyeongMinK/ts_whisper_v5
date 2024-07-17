@@ -21,11 +21,21 @@ client = OpenAI(api_key=api_key)
 if not api_key:
     raise ValueError("OPENAI_API_KEY 환경 변수가 설정되지 않았습니다.")
 
-# 모든 파일을 삭제하는 함수
-def delete_all_files(vector_store_id, file_list):
+# 벡터 스토어의 모든 파일을 삭제하는 함수
+def delete_all_files_in_vector(vector_store_id, file_list):
     for file in file_list:
         file_id = file.id
         response = client.beta.vector_stores.files.delete(vector_store_id=vector_store_id, file_id=file_id)
+
+# openai에 업로드 된 모든 파일 삭제
+def delete_all_files():
+    # Get the list of all files
+    files = client.files.list()
+    
+    # Iterate over the files and delete each one
+    for file in files['data']:
+        file_id = file['id']
+        client.files.delete(file_id)
 
 
 # Initialize openai assistent
@@ -33,7 +43,8 @@ if 'vector_store_id' not in st.session_state:
     st.session_state.vector_store_id = "vs_bHT7TcS6HrVHAYcNgeh48lKE"
     vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
     # 파일 목록에서 모든 파일 삭제하기
-    delete_all_files(st.session_state.vector_store_id, vector_store_files)
+    delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
+    delete_all_files()
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
