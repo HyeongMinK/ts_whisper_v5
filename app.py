@@ -164,7 +164,8 @@ if st.session_state.once_recording == True:
                        label="Download Full Audio",
                        data=audio_bytes,
                        file_name="merged_audio.mp3",
-                       mime="audio/mp3"
+                       mime="audio/mp3",
+                       type="primary"
                      )
 
 
