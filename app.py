@@ -174,7 +174,7 @@ if st.session_state.once_recording == True:
                 if 'delete_confirm' not in st.session_state:
                     st.session_state.delete_confirm = False
 
-                if st.button(f"Delete R{st.session_state.temp_page}recording"):
+                if st.button(f"Delete R{st.session_state.temp_page} recording"):
                     st.session_state.delete_confirm = True
 
                 if st.session_state.delete_confirm:
