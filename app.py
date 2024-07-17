@@ -216,6 +216,7 @@ with col2_file_uploader:
     elif len(uploaded_files) < len(st.session_state.uploader_list):
         st.session_state.uploader = False
         unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
+        print(unique_to_list)
         st.session_state.uploader_list = uploaded_files
 
         # OpenAI API를 통해 파일 리스트 조회
