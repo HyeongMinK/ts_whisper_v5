@@ -79,6 +79,12 @@ def merge_audios_with_silence(audio_files, silence_duration=1000):
         combined += AudioSegment.from_file(audio_file) + silence
     return combined
 
+def delete_files(i):
+    del st.session_state.transcriptions[i]
+    del st.session_state.file_paths[i]
+    del st.session_state.ts_texts[i]
+    del st.session_state.tts_audio_data[i]
+
 
 # Streamlit interface
 st.title("Streamlit Audio Translator")
@@ -184,10 +190,7 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                 if st.session_state.delete_confirm:
                     st.warning("Are you sure you want to delete it?")
                     if st.button("Yes, delete it"):
-                        del st.session_state.transcriptions[i]
-                        del st.session_state.file_paths[i]
-                        del st.session_state.ts_texts[i]
-                        del st.session_state.tts_audio_data[i]
+                        delete_files(i)
                         st.session_state.delete_confirm = False
                         if st.session_state.temp_page != 1 or not st.session_state.transcriptions:
                             st.session_state.temp_page -= 1
