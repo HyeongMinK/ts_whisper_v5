@@ -61,6 +61,9 @@ if 'assistant_id' not in st.session_state:
 if 'uploader' not in st.session_state:
     st.session_state.uploader = False
 
+if 'uploader_list' not in st.session_state:
+    st.session_state.uploader_list = []
+
 def state_uploader():
     st.session_state.uploader = True
     
@@ -158,7 +161,7 @@ with col1_tone:
 with col2_file_uploader:
     uploaded_files= st.file_uploader("Upload File", accept_multiple_files=True, on_change = state_uploader)
 
-    if st.session_state.uploader:
+    if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
 
         st.session_state.uploader = False
 
@@ -208,6 +211,9 @@ with col2_file_uploader:
             except Exception as e:
                 st.write("중복 파일 삭제 중 오류가 발생했습니다.")
                 st.write(e)
+
+    elif st.session_state.uploader and len(uploaded_files)<len(st.session_state.uploader_list):
+        st.session_state.uploader = False
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
