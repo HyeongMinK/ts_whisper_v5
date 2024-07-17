@@ -127,7 +127,9 @@ if st.session_state.once_recording == True:
 
 
     for i in range(len(st.session_state.transcriptions)):
-        button_label = f"R{i+1}: {st.session_state.transcriptions[i][:12]} .."
+        button_label = f"R{i+1}: {st.session_state.transcriptions[i][:12]}"
+        if len(st.session_state.transcriptions[i])>12:
+            button_label+=".."
         if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
             st.rerun()
