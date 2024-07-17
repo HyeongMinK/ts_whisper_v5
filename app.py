@@ -24,7 +24,7 @@ if not api_key:
 # 모든 파일을 삭제하는 함수
 def delete_all_files(vector_store_id, file_list):
     for file in file_list:
-        file_id = file['id']
+        file_id = file.id
         response = client.beta.vector_stores.files.delete(vector_store_id=vector_store_id, file_id=file_id)
 
 
