@@ -105,7 +105,7 @@ def gpt_call(client, text, selected_language, selected_tone):
         content += "and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     run = client.beta.threads.runs.create(thread_id="thread_nJyOZmEHQaabCI1wcOLjzgNs", assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
     
-    time.sleep(3)
+    time.sleep(30)
 
     thread_messages = client.beta.threads.messages.list("thread_nJyOZmEHQaabCI1wcOLjzgNs")
 
