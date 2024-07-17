@@ -185,9 +185,29 @@ with col2_file_uploader:
                 # 업로드 결과 출력
                 st.write(f"파일 업로드 완료: {uploaded_file.name}")
                 st.write(response)
+
+
+                file_id=response.id
+         # 벡터 스토어에 파일 업로드
+            try:
+                vector_store_response = client.beta.vector_stores.files.upload(
+                    vector_store_id=st.session_state.vector_store_id,
+                    file_id=file_id
+                )
+                
+                # 벡터 스토어 업로드 결과 확인
+                if vector_store_response.get("success"):
+                    st.write(f"벡터 스토어에 파일 업로드 성공: {file_id}")
+                else:
+                    st.write(f"벡터 스토어에 파일 업로드 실패: {file_id}")
+            except Exception as ve:
+                st.write(f"벡터 스토어 업로드 중 오류 발생: {file_id}")
+                st.write(ve)
+                st.write(vector_store_response)
             except Exception as e:
                 st.write(f"파일 업로드 중 오류가 발생했습니다: {uploaded_file.name}")
                 st.write(e)
+
             finally:
                 # 로컬 파일 삭제
                 if os.path.exists(file_path):
@@ -222,8 +242,11 @@ with col2_file_uploader:
         try:
             file_list = client.files.list()
             file_list_data = file_list
+            vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
+
             for file in file_list_data:
                 if file.filename == unique_to_list[0].name:
+                    client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
                     client.files.delete(file.id)
                     st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
 
