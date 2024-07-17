@@ -33,8 +33,8 @@ def delete_all_files():
     files = client.files.list()
     
     # Iterate over the files and delete each one
-    for file in files['data']:
-        file_id = file['id']
+    for file in files:
+        file_id = file.id
         client.files.delete(file_id)
 
 
