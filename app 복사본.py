@@ -6,7 +6,6 @@ from openai import OpenAI
 import os
 import warnings
 from pydub import AudioSegment
-import time
 
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
@@ -97,19 +96,17 @@ def transcribe_audio(file_path):
     return result['text']
 
 def gpt_call(client, text, selected_language, selected_tone):
-    thread_message = client.beta.threads.messages.create("thread_nJyOZmEHQaabCI1wcOLjzgNs", role="user", content=text)    
-
-    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. If the provided files are unrelated to the user's statements, simply translate the user's statements into {selected_language} and provide them to the user"
-
+    content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
     if selected_tone == "Politely and Academically":
-        content += "and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
-    run = client.beta.threads.runs.create(thread_id="thread_nJyOZmEHQaabCI1wcOLjzgNs", assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
-    
-    time.sleep(3)
-
-    thread_messages = client.beta.threads.messages.list("thread_nJyOZmEHQaabCI1wcOLjzgNs")
-
-    return thread_messages.data[0].content[0].text.value
+        content += "and Second, the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": content},
+            {"role": "user", "content": text}
+        ]
+    )
+    return completion.choices[0].message.content
 
 def text_to_speech(client, text):
     response = client.audio.speech.create(
