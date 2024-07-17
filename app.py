@@ -45,7 +45,7 @@ if 'thread_id' not in st.session_state:
         deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
     
     # 메시지 삭제 후 다시 메시지 목록을 불러와 확인하기
-    updated_messages = client.beta.threads.messages.list(thread_id=thread_id)
+    updated_messages = client.beta.threads.messages.list(thread_id=st.session_state.thread_id)
     print("Updated thread messages:", updated_messages)
 
 # Initialize session state lists
