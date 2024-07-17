@@ -7,6 +7,25 @@ import os
 import warnings
 from pydub import AudioSegment
 
+# Initialize session state lists
+if 'transcriptions' not in st.session_state:
+    st.session_state.transcriptions = []
+if 'file_paths' not in st.session_state:
+    st.session_state.file_paths = []
+if 'ts_texts' not in st.session_state:
+    st.session_state.ts_texts = []
+if 'tts_audio_data' not in st.session_state:
+    st.session_state.tts_audio_data = []
+
+if 'is_recording' not in st.session_state:
+    st.session_state.is_recording = False
+
+if 'once_recording' not in st.session_state:
+    st.session_state.once_recording = False
+
+if 'temp_page' not in st.session_state:
+    st.session_state.temp_page = 0
+
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
@@ -70,30 +89,12 @@ st.text_area("Write your notes here:", height=200)
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
 tones = ['Default', 'Politely and Academically']
-if 'is_recording' not in st.session_state:
-    st.session_state.is_recording = False
-
-if 'once_recording' not in st.session_state:
-    st.session_state.once_recording = False
-
-if 'temp_page' not in st.session_state:
-    st.session_state.temp_page = 0
 
 selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
 
 # 언어 선택 박스 (기본값을 영어로 설정)
 selected_language = st.selectbox('Language', languages, index=1)
 
-
-# Initialize session state lists
-if 'transcriptions' not in st.session_state:
-    st.session_state.transcriptions = []
-if 'file_paths' not in st.session_state:
-    st.session_state.file_paths = []
-if 'ts_texts' not in st.session_state:
-    st.session_state.ts_texts = []
-if 'tts_audio_data' not in st.session_state:
-    st.session_state.tts_audio_data = []
 
 audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
