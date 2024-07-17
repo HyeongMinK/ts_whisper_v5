@@ -186,7 +186,7 @@ if st.session_state.once_recording == True:
                         del st.session_state.ts_texts[i]
                         del st.session_state.tts_audio_data[i]
                         st.session_state.delete_confirm = False
-                        if st.session_state.temp_page != 1:
+                        if st.session_state.temp_page != 1 or not st.session_state.transcriptions:
                             st.session_state.temp_page -= 1
                         st.rerun()
                     if st.button("No, keep it"):
