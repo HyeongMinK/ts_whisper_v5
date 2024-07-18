@@ -54,8 +54,8 @@ if 'vector_store_id' not in st.session_state:
     st.session_state.vector_store_id = "vs_bHT7TcS6HrVHAYcNgeh48lKE"
     vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
     # 파일 목록에서 모든 파일 삭제하기
-    delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
-    delete_all_files()
+    #delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
+    #delete_all_files()
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
