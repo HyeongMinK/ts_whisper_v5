@@ -95,7 +95,7 @@ def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
     return result['text']
 
-def gpt_call(client, text, selected_language, selected_tone):
+def translator_call(client, text, selected_language, selected_tone):
     content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
     if selected_tone == "Politely and Academically":
         content += "and Second, the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"

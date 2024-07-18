@@ -101,15 +101,25 @@ def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
     return result['text']
 
-def gpt_call(client, text, selected_language, selected_tone, lag):
+def translator_call(client, text, selected_language, selected_tone):
+    content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
+    if selected_tone == "Politely and Academically":
+        content += "and Second, the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": content},
+            {"role": "user", "content": text}
+        ]
+    )
+    return completion.choices[0].message.content
+
+def gpt_call(client, text, selected_language, selected_tone):
     thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
     
     thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
     
-    if lag:
-        content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
-    else:
-        content = f"You are a translator. When a user inputs a sentence, you should translate it into {selected_language} exactly as it is without including any other content and provide it to the user"
+    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
 
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
@@ -301,7 +311,10 @@ if st.session_state.is_recording == True:
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
-    ts_text = gpt_call(client, transcription, selected_language, selected_tone, use_lag)
+    if use_lag:
+        ts_text = gpt_call(client, transcription, selected_language, selected_tone)
+    else:
+        ts_text = translator_call(client, transcription, selected_language, selected_tone)
 
     # Convert translated text to speech
     tts_audio = text_to_speech(client, ts_text)
