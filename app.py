@@ -54,12 +54,12 @@ if 'vector_store_id' not in st.session_state:
     st.session_state.vector_store_id = "vs_bHT7TcS6HrVHAYcNgeh48lKE"
     #vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
     # 파일 목록에서 모든 파일 삭제하기
-    #delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
-    #delete_all_files()
+    delete_all_files_in_vector(st.session_state.vector_store_id, vector_store_files)
+    delete_all_files()
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
-    #delete_messages(st.session_state.thread_id)
+    delete_messages(st.session_state.thread_id)
 
 if 'assistant_id' not in st.session_state:
     st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
@@ -113,6 +113,7 @@ def gpt_call(client, text, selected_language, selected_tone, lag):
 
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
+    content += "Finally, never reference the context within the thread."
     
     run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
     run_id = run.id
@@ -301,8 +302,6 @@ if st.session_state.is_recording == True:
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
     ts_text = gpt_call(client, transcription, selected_language, selected_tone, use_lag)
-    # 맥락 삭제
-    delete_messages(st.session_state.thread_id)
 
     # Convert translated text to speech
     tts_audio = text_to_speech(client, ts_text)
