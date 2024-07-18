@@ -198,7 +198,7 @@ with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
     use_lag = st.toggle("Using Lag")
 with col2_file_uploader:
-    uploaded_files= st.file_uploader("Upload File", type = [txt, doc, docx, pdf, pptx]accept_multiple_files=True, on_change = state_uploader)
+    uploaded_files= st.file_uploader("Upload File", type = [txt, doc, docx, pdf, pptx], accept_multiple_files=True, on_change = state_uploader)
 
     if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
 
