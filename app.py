@@ -129,7 +129,7 @@ def gpt_call(client, text, selected_language, selected_tone):
     run_id = run.id
     
     # Check if the run has been completed within a short time period
-    timeout = 10  # Timeout period in seconds
+    timeout = 25  # Timeout period in seconds
     interval = 0.5  # Interval period to check in seconds
     elapsed_time = 0
     
