@@ -196,7 +196,7 @@ tones = ['Default', 'Politely and Academically']
 col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
-    use_lag = st.toggle("Using Lag")
+    use_rag = st.toggle("Using Rag")
 with col2_file_uploader:
     uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
 
@@ -322,7 +322,7 @@ if st.session_state.is_recording == True:
 
     # Translate text
     progress_text.text("Translating text...")
-    if use_lag:
+    if use_rag:
         ts_text = gpt_call(client, transcription, selected_language, selected_tone)
     else:
         ts_text = translator_call(client, transcription, selected_language, selected_tone)
