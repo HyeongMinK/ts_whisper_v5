@@ -102,21 +102,38 @@ def transcribe_audio(file_path):
     return result['text']
 
 def gpt_call(client, text, selected_language, selected_tone, lag):
-    thread_message = client.beta.threads.messages.create("thread_nJyOZmEHQaabCI1wcOLjzgNs", role="user", content=text)    
+    thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
+    
+    thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
+    
     if lag:
         content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
     else:
         content = f"You are a translator. When a user inputs a sentence, you should translate it into {selected_language} exactly as it is without including any other content and provide it to the user"
 
     if selected_tone == "Politely and Academically":
-        content += "and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
-    run = client.beta.threads.runs.create(thread_id="thread_nJyOZmEHQaabCI1wcOLjzgNs", assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
+        content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     
-    time.sleep(3)
-
-    thread_messages = client.beta.threads.messages.list("thread_nJyOZmEHQaabCI1wcOLjzgNs")
-
-    return thread_messages.data[0].content[0].text.value
+    run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
+    run_id = run.id
+    
+    # Check if the run has been completed within a short time period
+    timeout = 10  # Timeout period in seconds
+    interval = 1  # Interval period to check in seconds
+    elapsed_time = 0
+    
+    while elapsed_time < timeout:
+        time.sleep(interval)
+        elapsed_time += interval
+        
+        run_status = client.beta.threads.runs.retrieve(thread_id=thread_id, run_id=run_id)
+        if run_status.status == "completed":
+            thread_messages = client.beta.threads.messages.list(thread_id)
+            if thread_messages.data and thread_messages.data[0].content[0].text.value:
+                return thread_messages.data[0].content[0].text.value
+    
+    # If the message is not processed within the timeout period
+    return "The process was not completed within the expected time."
 
 def text_to_speech(client, text):
     response = client.audio.speech.create(
