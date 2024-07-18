@@ -59,7 +59,7 @@ if 'vector_store_id' not in st.session_state:
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
-    delete_messages(st.session_state.thread_id)
+    #delete_messages(st.session_state.thread_id)
 
 if 'assistant_id' not in st.session_state:
     st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
