@@ -310,14 +310,28 @@ if st.session_state.is_recording == True:
 
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
+
+    # Initialize progress bar
+    progress_bar = st.progress(0)
+    progress_text = st.empty()
+    
+    # Transcribe audio
+    progress_text.text("Transcribing audio...")
     transcription = transcribe_audio(st.session_state.file_path)
+    progress_bar.progress(33)
+
+    # Translate text
+    progress_text.text("Translating text...")
     if use_lag:
         ts_text = gpt_call(client, transcription, selected_language, selected_tone)
     else:
         ts_text = translator_call(client, transcription, selected_language, selected_tone)
+    progress_bar.progress(66)
 
     # Convert translated text to speech
+    progress_text.text("Converting text to speech...")
     tts_audio = text_to_speech(client, ts_text)
+    progress_bar.progress(100)
 
     # Append results to session state lists
     st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
