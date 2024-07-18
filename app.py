@@ -38,6 +38,16 @@ def delete_all_files():
         file_id = file.id
         client.files.delete(file_id)
 
+def delete_messages(id):
+# 스레드의 메시지 목록을 불러오기
+    messages = client.beta.threads.messages.list(thread_id=id)
+    # 메시지 목록에서 모든 메시지 삭제하기
+    for message in messages:
+        message_id = message.id
+        deleted_message_response = client.beta.threads.messages.delete(thread_id=id, message_id=message_id)
+
+
+
 
 # Initialize openai assistent
 if 'vector_store_id' not in st.session_state:
@@ -49,12 +59,7 @@ if 'vector_store_id' not in st.session_state:
 
 if 'thread_id' not in st.session_state:
     st.session_state.thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
-    # 스레드의 메시지 목록을 불러오기
-    messages = client.beta.threads.messages.list(thread_id=st.session_state.thread_id)
-    # 메시지 목록에서 모든 메시지 삭제하기
-    for message in messages:
-        message_id = message.id
-        deleted_message_response = client.beta.threads.messages.delete(thread_id=st.session_state.thread_id, message_id=message_id)
+    delete_messages(st.session_state.thread_id)
 
 if 'assistant_id' not in st.session_state:
     st.session_state.assistant_id = "asst_QvnqTXw1LoxeqmwHAn2IMVoW"
@@ -279,6 +284,8 @@ if st.session_state.is_recording == True:
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
     ts_text = gpt_call(client, transcription, selected_language, selected_tone, use_lag)
+    # 맥락 삭제
+    delete_messages(st.session_state.thread_id)
 
     # Convert translated text to speech
     tts_audio = text_to_speech(client, ts_text)
