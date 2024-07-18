@@ -96,10 +96,12 @@ def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
     return result['text']
 
-def gpt_call(client, text, selected_language, selected_tone):
+def gpt_call(client, text, selected_language, selected_tone, lag):
     thread_message = client.beta.threads.messages.create("thread_nJyOZmEHQaabCI1wcOLjzgNs", role="user", content=text)    
-
-    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. If the provided files are unrelated to the user's statements, simply translate the user's statements into {selected_language} and provide them to the user. In this case, do not never add any other words your answer besides translating the user's input directly and In this case, If the input is '그냥 번역하라고 했지', you should respond with 'I just told you to translate' and nothing else"
+    if lag:
+        content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
+    else:
+        content = f"You are a translator. When a user inputs a sentence, you should translate it into {selected_language} exactly as it is without including any other content and provide it to the user"
 
     if selected_tone == "Politely and Academically":
         content += "and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
@@ -161,6 +163,7 @@ tones = ['Default', 'Politely and Academically']
 col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+    use_lag = st.toggle("Using Lag")
 with col2_file_uploader:
     uploaded_files= st.file_uploader("Upload File", accept_multiple_files=True, on_change = state_uploader)
 
@@ -275,7 +278,7 @@ if st.session_state.is_recording == True:
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
     transcription = transcribe_audio(st.session_state.file_path)
-    ts_text = gpt_call(client, transcription, selected_language, selected_tone)
+    ts_text = gpt_call(client, transcription, selected_language, selected_tone, use_lag)
 
     # Convert translated text to speech
     tts_audio = text_to_speech(client, ts_text)
