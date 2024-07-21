@@ -188,7 +188,8 @@ st.title("Streamlit Audio Translator")
 
 st.write("Select the language of the translation result and click Start!")
 def none_fuc:
-    return True
+    a=True 
+    return a
 st.text_area("Write your notes here:", height=200, on_change =none_fuc)
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
