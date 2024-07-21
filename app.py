@@ -99,7 +99,7 @@ if 'is_re_recording' not in st.session_state:
 
 
 def transcribe_audio(file_path):
-    segments, info = model.transcribe(file_path, beam_size=5)
+    segments, info = model.transcribe(file_path, beam_size=3)
     return_text=""
     for segment in segments:
         return_text+=segment.text
