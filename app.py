@@ -100,7 +100,10 @@ if 'is_re_recording' not in st.session_state:
 
 def transcribe_audio(file_path):
     segments, info = model.transcribe(file_path, beam_size=5)
-    return segment.text
+    return_text=""
+    for segment in segments:
+        return_text+=segment.text
+    return return_text
 
 def translator_call(client, text, selected_language, selected_tone):
     content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
