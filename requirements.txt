@@ -6,3 +6,4 @@ av
 numpy
 openai
 pydub
+faster-whisper
