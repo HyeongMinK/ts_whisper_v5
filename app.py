@@ -8,7 +8,6 @@ import warnings
 from pydub import AudioSegment
 import time
 
-
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
@@ -185,6 +184,8 @@ def merge_audios_with_silence(audio_files, silence_duration=700):
 def sleep_fuc():
     time.sleep(1.5)
 
+
+
 # Streamlit interface
 st.title("Streamlit Audio Translator")
 
@@ -198,7 +199,7 @@ tones = ['Default', 'Politely and Academically']
 col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
-    use_rag = st.toggle("Using RAG")
+    use_rag = st.toggle("Using Rag")
 with col2_file_uploader:
     uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
 
@@ -432,43 +433,9 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                         st.session_state.temp_page = change_option + 1
                         st.rerun()                    
 
-# 하단 고정 텍스트와 스타일 조정
-st.markdown(
-    """
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Futura:wght@300;400;700&display=swap');
-
-    .footer {
-        position: relative;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #734954;
-        color: #F2F2F2;
-        text-align: right;
-        padding: 10px;
-        border-top: 1px solid #F2F2F2;
-        font-family: 'Futura', sans-serif; /* 폰트 패밀리 변경 */
-        font-size: 12px; /* 폰트 크기 변경 */
-        font-style: italic; /* 폰트 스타일 변경 */
-    }
-    section[data-testid="stSidebar"] {
-        width: 150px !important; # Set the width to your desired value
-    }
-    </style>
-    <div class="footer">
-        Digital Wellness Lab 2024<br>
-        Business Analytics, School of Management<br>
-        Kyung Hee University<br>
-        Maintained by H-.M-. Kim & S-.W-. Kim
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
 
       
 
-    #Delete temporary files if needed
+    # Delete temporary files if needed
     #os.remove(st.session_state.file_paths[-1])
     #os.remove(st.session_state.tts_audio_data[-1])
