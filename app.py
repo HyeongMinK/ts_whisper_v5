@@ -98,8 +98,6 @@ if 'temp_page' not in st.session_state:
 if 'is_re_recording' not in st.session_state:
     st.session_state.is_re_recording = False
 
-if 'stop_process' not in st.session_state:
-    st.session_state.stop_process = False
 
 def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
@@ -321,39 +319,24 @@ if st.session_state.is_recording == True:
     # Initialize progress bar
     progress_bar = st.progress(0)
     progress_text = st.empty()
-    # 중지 버튼
-    if st.button("Stop"):
-        st.session_state.stop_process = True
-
+    
     # Transcribe audio
-    if not st.session_state.stop_process:
-        progress_text.text("Transcribing audio...")
-        transcription = transcribe_audio(st.session_state.file_path)
-        progress_bar.progress(33)
-        if st.session_state.stop_process:
-            st.write("Process stopped.")
-            st.rerun()
+    progress_text.text("Transcribing audio...")
+    transcription = transcribe_audio(st.session_state.file_path)
+    progress_bar.progress(33)
 
     # Translate text
-    if not st.session_state.stop_process:
-        progress_text.text("Translating text...")
-        if use_rag:
-            ts_text = gpt_call(client, transcription, selected_language, selected_tone)
-        else:
-            ts_text = translator_call(client, transcription, selected_language, selected_tone)
-        progress_bar.progress(66)
-        if st.session_state.stop_process:
-            st.write("Process stopped.")
-            st.rerun()
+    progress_text.text("Translating text...")
+    if use_rag:
+        ts_text = gpt_call(client, transcription, selected_language, selected_tone)
+    else:
+        ts_text = translator_call(client, transcription, selected_language, selected_tone)
+    progress_bar.progress(66)
 
     # Convert translated text to speech
-    if not st.session_state.stop_process:
-        progress_text.text("Converting text to speech...")
-        tts_audio = text_to_speech(client, ts_text)
-        progress_bar.progress(100)
-        if st.session_state.stop_process:
-            st.write("Process stopped.")
-            st.rerun()
+    progress_text.text("Converting text to speech...")
+    tts_audio = text_to_speech(client, ts_text)
+    progress_bar.progress(100)
 
     # Append results to session state lists
     st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
