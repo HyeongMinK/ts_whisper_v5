@@ -181,14 +181,14 @@ def merge_audios_with_silence(audio_files, silence_duration=700):
         combined += AudioSegment.from_file(audio_file) + silence
     return combined
 
-#def sleep_fuc():
-    #time.sleep(1.5)
+def sleep_fuc():
+    time.sleep(1.5)
 
 # Streamlit interface
 st.title("Streamlit Audio Translator")
 
 st.write("Select the language of the translation result and click Start!")
-st.text_area("Write your notes here:", height=200)
+st.text_area("Write your notes here:", height=200, on_change =sleep_fuc)
 # 선택할 수 있는 언어 목록
 languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', 'हिन्दी']
 
@@ -431,7 +431,21 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                         st.session_state.temp_page = change_option + 1
                         st.rerun()                    
 
-
+st.markdown(
+    """
+    <style>
+    .small-text {
+        font-size: 12px;  /* 글씨 크기 설정 */
+        color: gray;      /* 텍스트 색상 설정 */
+    }
+    </style>
+    <p class="small-text">Digital Wellness Lab 2024<br>
+        Business Analytics, School of Management<br>
+        Kyung Hee University<br>
+        Maintained by H-.M-. Kim & S-.W-. Kim</p>
+    """,
+    unsafe_allow_html=True
+)
       
 
     # Delete temporary files if needed
