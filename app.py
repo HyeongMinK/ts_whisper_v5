@@ -8,6 +8,10 @@ import warnings
 from pydub import AudioSegment
 import time
 
+
+# Streamlit interface
+st.title("Streamlit Audio Translator")
+
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
@@ -182,9 +186,6 @@ def merge_audios_with_silence(audio_files, silence_duration=700):
     return combined
 
 
-
-# Streamlit interface
-st.title("Streamlit Audio Translator")
 
 st.write("Select the language of the translation result and click Start!")
 st.text_area("Write your notes here:", height=200)
