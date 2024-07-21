@@ -26,6 +26,7 @@ if "process_started" not in st.session_state:
 if not st.session_state.process_started:
     if st.button("Start Application"):
         st.session_state.process_started = True
+        st.rerun()
 
 if st.session_state.process_started:
 
