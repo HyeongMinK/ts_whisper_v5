@@ -30,6 +30,8 @@ if 'task_thread' not in st.session_state:
     st.session_state.task_thread = None
 if 'progress' not in st.session_state:
     st.session_state.progress = 0
+if 'progress_message' not in st.session_state:
+    st.session_state.progress_message = "Ready"
 
 # 벡터 스토어의 모든 파일을 삭제하는 함수
 def delete_all_files_in_vector(vector_store_id, file_list):
