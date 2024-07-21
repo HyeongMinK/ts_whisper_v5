@@ -433,6 +433,6 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
 
       
 
-    # Delete temporary files if needed
+    #Delete temporary files if needed
     #os.remove(st.session_state.file_paths[-1])
     #os.remove(st.session_state.tts_audio_data[-1])
