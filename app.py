@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using F
 # Load the Whisper model
 @st.cache_resource
 def load_whisper_model():
-    return WhisperModel(model_size, device="cpu", compute_type="int8")
+    return WhisperModel("small", device="cpu", compute_type="int8")
 
 model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
