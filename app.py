@@ -7,7 +7,7 @@ import os
 import warnings
 from pydub import AudioSegment
 import time
-from faster_whisper import WhisperModel
+
 
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using F
 # Load the Whisper model
 @st.cache_resource
 def load_whisper_model():
-    return WhisperModel("small", device="cpu", compute_type="int8")
+    return whisper.load_model("small")
 
 model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
@@ -99,11 +99,8 @@ if 'is_re_recording' not in st.session_state:
 
 
 def transcribe_audio(file_path):
-    segments, info = model.transcribe(file_path, beam_size=3, language = "ko")
-    return_text=""
-    for segment in segments:
-        return_text+=segment.text
-    return return_text
+    result = model.transcribe(file_path, language='ko')
+    return result['text']
 
 def translator_call(client, text, selected_language, selected_tone):
     content = f"First Your main task is to translate given text to {selected_language}. Do not provide me with anything other than the translation. for example 저는 회계 원리를 좋아합니다 -> 我喜欢会计原理 is a very wrong example"
