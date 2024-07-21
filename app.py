@@ -431,21 +431,7 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                         st.session_state.temp_page = change_option + 1
                         st.rerun()                    
 
-st.markdown(
-    """
-    <style>
-    .small-text {
-        font-size: 12px;  /* 글씨 크기 설정 */
-        color: gray;      /* 텍스트 색상 설정 */
-    }
-    </style>
-    <p class="small-text">Digital Wellness Lab 2024<br>
-        Business Analytics, School of Management<br>
-        Kyung Hee University<br>
-        Maintained by H-.M-. Kim & S-.W-. Kim</p>
-    """,
-    unsafe_allow_html=True
-)
+
       
 
     # Delete temporary files if needed
