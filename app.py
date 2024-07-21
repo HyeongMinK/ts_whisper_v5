@@ -8,34 +8,7 @@ import warnings
 from pydub import AudioSegment
 import time
 
-footer="""<style>
-a:link , a:visited{
-color: blue;
-background-color: transparent;
-text-decoration: underline;
-}
 
-a:hover,  a:active {
-color: red;
-background-color: transparent;
-text-decoration: underline;
-}
-
-.footer {
-position: fixed;
-left: 0;
-bottom: 0;
-width: 100%;
-background-color: white;
-color: black;
-text-align: center;
-}
-</style>
-<div class="footer">
-<p>Developed with ❤ by <a style='display: block; text-align: center;' href="https://www.heflin.dev/" target="_blank">Heflin Stephen Raj S</a></p>
-</div>
-"""
-st.markdown(footer,unsafe_allow_html=True)
 
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
@@ -462,7 +435,18 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                         st.session_state.temp_page = change_option + 1
                         st.rerun()                    
 
-
+st.markdown(
+    """
+    <style>
+    .small-text {
+        font-size: 10px;  /* 글씨 크기 설정 */
+        color: gray;      /* 텍스트 색상 설정 */
+    }
+    </style>
+    <p class="small-text">This is a very small reference-like text.</p>
+    """,
+    unsafe_allow_html=True
+)
       
 
     # Delete temporary files if needed
