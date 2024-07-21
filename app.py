@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using F
 # Load the Whisper model
 @st.cache_resource
 def load_whisper_model():
-    return WhisperModel("small", device="cpu", compute_type="int8", language = "ko")
+    return WhisperModel("small", device="cpu", compute_type="int8")
 
 model = load_whisper_model()
 api_key = os.getenv('OPENAI_API_KEY')  # 환경 변수에서 API 키를 가져옵니다.
@@ -99,7 +99,7 @@ if 'is_re_recording' not in st.session_state:
 
 
 def transcribe_audio(file_path):
-    segments, info = model.transcribe(file_path, beam_size=3)
+    segments, info = model.transcribe(file_path, beam_size=3, language = "ko")
     return_text=""
     for segment in segments:
         return_text+=segment.text
