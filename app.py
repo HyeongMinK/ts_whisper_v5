@@ -181,8 +181,8 @@ def merge_audios_with_silence(audio_files, silence_duration=700):
         combined += AudioSegment.from_file(audio_file) + silence
     return combined
 
-def sleep_fuc():
-    time.sleep(1.5)
+#def sleep_fuc():
+    #time.sleep(1.5)
 
 # Streamlit interface
 st.title("Streamlit Audio Translator")
