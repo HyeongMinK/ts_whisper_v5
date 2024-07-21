@@ -439,11 +439,14 @@ st.markdown(
     """
     <style>
     .small-text {
-        font-size: 10px;  /* 글씨 크기 설정 */
+        font-size: 12px;  /* 글씨 크기 설정 */
         color: gray;      /* 텍스트 색상 설정 */
     }
     </style>
-    <p class="small-text">This is a very small reference-like text.</p>
+    <p class="small-text">Digital Wellness Lab 2024<br>
+        Business Analytics, School of Management<br>
+        Kyung Hee University<br>
+        Maintained by H-.M-. Kim & S-.W-. Kim</p>
     """,
     unsafe_allow_html=True
 )
