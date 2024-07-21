@@ -451,9 +451,6 @@ st.markdown(
         font-size: 12px; /* 폰트 크기 변경 */
         font-style: italic; /* 폰트 스타일 변경 */
     }
-    .stApp {
-        background-color: #A67676; /* 원하는 색상 코드로 변경 */
-    }
     section[data-testid="stSidebar"] {
         width: 150px !important; # Set the width to your desired value
     }
