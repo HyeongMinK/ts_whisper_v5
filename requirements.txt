@@ -6,4 +6,3 @@ av
 numpy
 openai
 pydub
-threading
