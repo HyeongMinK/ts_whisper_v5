@@ -201,7 +201,7 @@ tones = ['Default', 'Politely and Academically']
 col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
     selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
-    use_rag = st.toggle("Using Rag")
+    use_rag = st.toggle("Using RAG")
 with col2_file_uploader:
     uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
 
