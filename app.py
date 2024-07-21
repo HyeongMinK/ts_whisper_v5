@@ -15,7 +15,7 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=Futura:wght@300;400;700&display=swap');
 
     .footer {
-        position: fixed;
+        position: relative;
         left: 0;
         bottom: 0;
         width: 100%;
