@@ -306,6 +306,21 @@ with col2_audio:
     if st.session_state.transcriptions:
         re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
+if st.session_state.is_recording == True:
+    st.session_state.once_recording = True
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
+        if st.session_state.is_re_recording == False:
+            tmp_wav_file.write(audio["bytes"])
+        else:
+            tmp_wav_file.write(re_audio["bytes"])
+            st.session_state.is_re_recording = False
+
+        tmp_wav_file.flush()
+        st.session_state.file_path = tmp_wav_file.name
+
+    # Initialize progress bar
+    progress_bar = st.progress(0)
+    progress_text = st.empty()
     # 중지 버튼
     if st.button("Stop"):
         st.session_state.stop_process = True
