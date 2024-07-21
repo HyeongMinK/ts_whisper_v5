@@ -332,7 +332,7 @@ if st.session_state.is_recording == True:
         progress_bar.progress(33)
         if st.session_state.stop_process:
             st.write("Process stopped.")
-            st.stop()
+            st.rerun()
 
     # Translate text
     if not st.session_state.stop_process:
@@ -344,7 +344,7 @@ if st.session_state.is_recording == True:
         progress_bar.progress(66)
         if st.session_state.stop_process:
             st.write("Process stopped.")
-            st.stop()
+            st.rerun()
 
     # Convert translated text to speech
     if not st.session_state.stop_process:
@@ -353,7 +353,7 @@ if st.session_state.is_recording == True:
         progress_bar.progress(100)
         if st.session_state.stop_process:
             st.write("Process stopped.")
-            st.stop()
+            st.rerun()
 
     # Append results to session state lists
     st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
