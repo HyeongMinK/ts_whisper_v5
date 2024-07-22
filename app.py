@@ -141,7 +141,7 @@ def gpt_call(client, text, selected_language, selected_tone):
     
     thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
     
-    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Convey the enriched content exactly as it is to the user. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
+    content = f"You are a presentation script maker. Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements. Please convey the enriched content exactly as it is to the user without breaking it into paragraphs and present it as continuous text.. Please translate the enriched content into {selected_language} and provide it to the user, and no other language. and Do not include automatically generated citations or references in the response under any circumstances."
 
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
