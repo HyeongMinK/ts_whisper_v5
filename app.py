@@ -287,7 +287,7 @@ with col2_file_uploader:
             st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
             st.write(e)
 
-if st.session_state.temp_page > -1
+if st.session_state.temp_page > -1:
     # 언어 선택 박스 (기본값을 영어로 설정)
     selected_language = st.selectbox('Language', languages, index=1)
 
