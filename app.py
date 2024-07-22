@@ -328,6 +328,7 @@ if st.session_state.temp_page > -1:
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
     st.session_state.progress_done = False
+    
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         if st.session_state.is_re_recording == False:
             tmp_wav_file.write(audio["bytes"])
@@ -342,10 +343,11 @@ if st.session_state.is_recording == True:
     # Initialize progress bar
     progress_bar = st.progress(0)
     progress_text = st.empty()
+    
     if st.session_state.progress_done == True:
-        if st.button("Stop Progress", type = "primary"):
-           st.session_state.is_recording = False
-           st.rerun()
+        if st.button("Stop Progress", type="primary"):
+            st.session_state.is_recording = False
+            st.rerun()
 
         # Transcribe audio
         progress_text.text("Transcribing audio...")
@@ -358,7 +360,7 @@ if st.session_state.is_recording == True:
             ts_text = gpt_call(client, transcription, selected_language, selected_tone)
         else:
             ts_text = translator_call(client, transcription, selected_language, selected_tone)
-    progress_bar.progress(66)
+        progress_bar.progress(66)
 
         # Convert translated text to speech
         progress_text.text("Converting text to speech...")
@@ -366,13 +368,13 @@ if st.session_state.is_recording == True:
         progress_bar.progress(100)
 
         # Append results to session state lists
-        st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
-        st.session_state.file_paths.insert(st.session_state.temp_page,st.session_state.file_path)
-        st.session_state.ts_texts.insert(st.session_state.temp_page,ts_text)
-        st.session_state.tts_audio_data.insert(st.session_state.temp_page,tts_audio)
+        st.session_state.transcriptions.insert(st.session_state.temp_page, transcription)
+        st.session_state.file_paths.insert(st.session_state.temp_page, st.session_state.file_path)
+        st.session_state.ts_texts.insert(st.session_state.temp_page, ts_text)
+        st.session_state.tts_audio_data.insert(st.session_state.temp_page, tts_audio)
 
-        #temp_Page
-        st.session_state.temp_page+=1
+        # Increment temp_page
+        st.session_state.temp_page += 1
 
         st.session_state.is_recording = False
         st.rerun()
