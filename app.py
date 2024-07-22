@@ -324,6 +324,7 @@ if st.session_state.is_recording == True:
     st.session_state.once_recording = True
     if st.button("Stop Progress", type = "primary"):
        st.session_state.is_recording = False
+       st.rerun()
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
         if st.session_state.is_re_recording == False:
             tmp_wav_file.write(audio["bytes"])
