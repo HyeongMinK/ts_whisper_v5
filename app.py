@@ -196,7 +196,7 @@ tones = ['Default', 'Politely and Academically']
 
 col1_tone, col2_file_uploader = st.columns([1, 1])
 if st.session_state.temp_page > -1:
-    with col1_tone:
+   with col1_tone:
         selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
         use_rag = st.toggle("Using RAG")
     with col2_file_uploader:
@@ -267,6 +267,7 @@ if st.session_state.temp_page > -1:
                 except Exception as e:
                     st.write("중복 파일 삭제 중 오류가 발생했습니다.")
                     st.write(e)
+
         elif len(uploaded_files) < len(st.session_state.uploader_list):
             st.session_state.uploader = False
             unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
@@ -286,29 +287,6 @@ if st.session_state.temp_page > -1:
             except Exception as e:
                 st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
                 st.write(e)
-            finally:
-                st.session_state.uploader = False
-                st.session_state.uploader_list = uploaded_files
-
-    elif len(uploaded_files) < len(st.session_state.uploader_list):
-        st.session_state.uploader = False
-        unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
-        st.session_state.uploader_list = uploaded_files
-        # OpenAI API를 통해 파일 리스트 조회
-        try:
-            file_list = client.files.list()
-            file_list_data = file_list
-            vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
-
-            for file in file_list_data:
-                if file.filename == unique_to_list[0].name:
-                    client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
-                    client.files.delete(file.id)
-                    st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
-
-        except Exception as e:
-            st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
-            st.write(e)
 
 if st.session_state.temp_page > -1:
     # 언어 선택 박스 (기본값을 영어로 설정)
