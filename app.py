@@ -439,6 +439,7 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
 
 if st.session_state.temp_page == -1:
     all_script=""
+    after_script=""
     for content in st.session_state.transcriptions:
         all_script+=content
     st.markdown("#### All transcriptions")
@@ -446,7 +447,9 @@ if st.session_state.temp_page == -1:
 
     
     if st.button(f"Translate to {selected_language}"):
-        print("hi")                
+        print("hi")
+    st.markdown("#### After translation")
+    st.markdown(f"```\n{after_script}\n```")                
 
 st.markdown(
     """
