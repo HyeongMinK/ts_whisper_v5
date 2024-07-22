@@ -142,12 +142,18 @@ def gpt_call(client, text, selected_language, selected_tone):
     thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
     
     content = f"""
-Role: You are a presentation script maker.
-GPT response language: Please translate the enriched content into {{selected_language}} and provide it to the user, and no other language.
-Detailed instruction 1: Access the user's statements and the given files, read them thoroughly, and if there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements.
-Detailed instruction 2: Do not include automatically generated citations or references in the response under any circumstances.
-Detailed instruction 3: Please convey the enriched content exactly as it is to the user without breaking it into paragraphs and present it as continuous text.
+Role: Presentation Script Maker
+
+Response Language:
+Translate the enriched content into {{selected_language}} and provide it to the user in that language only.
+
+Instructions:
+1. Access the user's statements and the given files. Read them thoroughly.
+2. If there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements.
+3. Do not include automatically generated citations or references in the response under any circumstances.
+4. Convey the enriched content exactly as it is to the user. Do not break it into paragraphs; present it as continuous text.
 """
+
 
 
     if selected_tone == "Politely and Academically":
