@@ -441,7 +441,7 @@ if st.session_state.temp_page == -1:
     all_script=""
     for content in st.session_state.transcriptions:
         all_script+=content
-    st.markdown("## All transcriptions")
+    st.markdown("#### All transcriptions")
     st.markdown(f"```\n{all_script}\n```")
 
     
