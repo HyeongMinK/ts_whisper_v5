@@ -116,6 +116,7 @@ if 'after_script' not in st.session_state:
 
 
 
+
 def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
     return result['text']
@@ -326,7 +327,6 @@ if st.session_state.is_recording == True:
     progress_bar = st.progress(0)
     progress_text = st.empty()
     if st.button("Stop Progress", type = "primary"):
-       time.sleep(3)
        st.session_state.is_recording = False
        st.rerun()
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
