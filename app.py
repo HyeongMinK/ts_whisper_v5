@@ -99,6 +99,11 @@ if 'is_re_recording' not in st.session_state:
 if 'label_visibility' not in st.session_state:
     st.session_state.label_visibility = "visible"
 
+if st.session_state.temp_page == -1:
+    st.session_state.label_visibility = "collapsed"
+else:
+    st.session_state.label_visibility = "visible"
+
 
 def transcribe_audio(file_path):
     result = model.transcribe(file_path, language='ko')
