@@ -447,7 +447,11 @@ if st.session_state.temp_page == -1:
 
     
     if st.button(f"Translate to {selected_language}"):
-        print("hi")
+        if use_rag:
+            ts_text = gpt_call(client, all_script, selected_language, selected_tone)
+        else:
+            ts_text = translator_call(client, all_script, selected_language, selected_tone)
+        after_script += ts_text
     st.markdown("#### After translation")
     st.markdown(f"```\n{after_script}\n```")                
 
