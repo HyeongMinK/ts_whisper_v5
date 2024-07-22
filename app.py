@@ -322,6 +322,9 @@ if st.session_state.temp_page > -1:
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
+    # Initialize progress bar
+    progress_bar = st.progress(0)
+    progress_text = st.empty()
     if st.button("Stop Progress", type = "primary"):
        st.session_state.is_recording = False
        st.rerun()
@@ -335,10 +338,6 @@ if st.session_state.is_recording == True:
         tmp_wav_file.flush()
         st.session_state.file_path = tmp_wav_file.name
 
-    # Initialize progress bar
-    progress_bar = st.progress(0)
-    progress_text = st.empty()
-    
     # Transcribe audio
     progress_text.text("Transcribing audio...")
     transcription = transcribe_audio(st.session_state.file_path)
