@@ -195,97 +195,98 @@ languages = ['한국어', 'English', '中文', '日本語', 'Tiếng Việt', '�
 tones = ['Default', 'Politely and Academically']
 
 col1_tone, col2_file_uploader = st.columns([1, 1])
-with col1_tone:
-    selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
-    use_rag = st.toggle("Using RAG")
-with col2_file_uploader:
-    uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
+if st.session_state.temp_page > -1:
+    with col1_tone:
+        selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+        use_rag = st.toggle("Using RAG")
+    with col2_file_uploader:
+        uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
 
-    if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
+        if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
 
-        st.session_state.uploader = False
-        st.session_state.uploader_list = uploaded_files
+            st.session_state.uploader = False
+            st.session_state.uploader_list = uploaded_files
 
-        for uploaded_file in uploaded_files:
-            # 파일을 저장할 경로 설정
-            file_path = uploaded_file.name
-        
-            # 파일을 저장
-            with open(file_path, "wb") as f:
-                f.write(uploaded_file.getbuffer())
-        
-            try:
-                # OpenAI API를 통해 파일 업로드
-                with open(file_path, "rb") as f:
-                    response = client.files.create(
-                        file=f,
-                        purpose="assistants"
-                    )
+            for uploaded_file in uploaded_files:
+                # 파일을 저장할 경로 설정
+                file_path = uploaded_file.name
             
-                # 업로드 결과 출력
-                st.write(f"파일 업로드 완료: {uploaded_file.name}")
-                st.write(response)
-
-
-                file_id=response.id
-
-                # 벡터 스토어에 파일 업로드
+                # 파일을 저장
+                with open(file_path, "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+            
                 try:
-                    vector_store_response = client.beta.vector_stores.files.create(
-                        vector_store_id=st.session_state.vector_store_id,
-                        file_id=file_id
-                    )
-                except Exception as ve:
-                    st.write(f"벡터 스토어 업로드 중 오류 발생: {file_id}")
-                    st.write(ve)
-            except Exception as e:
-                st.write(f"파일 업로드 중 오류가 발생했습니다: {uploaded_file.name}")
-                st.write(e)
+                    # OpenAI API를 통해 파일 업로드
+                    with open(file_path, "rb") as f:
+                        response = client.files.create(
+                            file=f,
+                            purpose="assistants"
+                        )
+                
+                    # 업로드 결과 출력
+                    st.write(f"파일 업로드 완료: {uploaded_file.name}")
+                    st.write(response)
 
-            finally:
-                # 로컬 파일 삭제
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-                    st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
-                # 중복 파일 삭제 로직
+
+                    file_id=response.id
+
+                    # 벡터 스토어에 파일 업로드
+                    try:
+                        vector_store_response = client.beta.vector_stores.files.create(
+                            vector_store_id=st.session_state.vector_store_id,
+                            file_id=file_id
+                        )
+                    except Exception as ve:
+                        st.write(f"벡터 스토어 업로드 중 오류 발생: {file_id}")
+                        st.write(ve)
+                except Exception as e:
+                    st.write(f"파일 업로드 중 오류가 발생했습니다: {uploaded_file.name}")
+                    st.write(e)
+
+                finally:
+                    # 로컬 파일 삭제
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        st.write(f"로컬 파일 삭제 완료: {uploaded_file.name}")
+                    # 중복 파일 삭제 로직
+                try:
+                    # OpenAI API를 통해 파일 리스트 조회
+                    file_list = client.files.list()
+
+                    # 파일 이름을 기준으로 중복 체크
+                    file_names = {}
+                    for file in file_list:
+                        filename = file.filename
+                        file_id = file.id
+                        if filename in file_names:
+                            # 중복된 파일 삭제
+                            client.files.delete(file_id)
+                            st.write(f"중복된 파일 삭제: {filename} (ID: {file_id})")
+                        else:
+                            file_names[filename] = file_id
+                except Exception as e:
+                    st.write("중복 파일 삭제 중 오류가 발생했습니다.")
+                    st.write(e)
+
+        elif len(uploaded_files) < len(st.session_state.uploader_list):
+            st.session_state.uploader = False
+            unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
+            st.session_state.uploader_list = uploaded_files
+            # OpenAI API를 통해 파일 리스트 조회
             try:
-                # OpenAI API를 통해 파일 리스트 조회
                 file_list = client.files.list()
+                file_list_data = file_list
+                vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
 
-                # 파일 이름을 기준으로 중복 체크
-                file_names = {}
-                for file in file_list:
-                    filename = file.filename
-                    file_id = file.id
-                    if filename in file_names:
-                        # 중복된 파일 삭제
-                        client.files.delete(file_id)
-                        st.write(f"중복된 파일 삭제: {filename} (ID: {file_id})")
-                    else:
-                        file_names[filename] = file_id
+                for file in file_list_data:
+                    if file.filename == unique_to_list[0].name:
+                        client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
+                        client.files.delete(file.id)
+                        st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
+
             except Exception as e:
-                st.write("중복 파일 삭제 중 오류가 발생했습니다.")
+                st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
                 st.write(e)
-
-    elif len(uploaded_files) < len(st.session_state.uploader_list):
-        st.session_state.uploader = False
-        unique_to_list = [item for item in st.session_state.uploader_list if item not in uploaded_files]
-        st.session_state.uploader_list = uploaded_files
-        # OpenAI API를 통해 파일 리스트 조회
-        try:
-            file_list = client.files.list()
-            file_list_data = file_list
-            vector_store_files = client.beta.vector_stores.files.list(vector_store_id=st.session_state.vector_store_id)
-
-            for file in file_list_data:
-                if file.filename == unique_to_list[0].name:
-                    client.beta.vector_stores.files.delete(vector_store_id=st.session_state.vector_store_id, file_id=file.id)
-                    client.files.delete(file.id)
-                    st.write(f"OpenAI에서 파일 삭제: {unique_to_list[0].name}")
-
-        except Exception as e:
-            st.write(f"파일 삭제 중 오류가 발생했습니다: {unique_to_list[0].name}")
-            st.write(e)
 
 if st.session_state.temp_page > -1:
     # 언어 선택 박스 (기본값을 영어로 설정)
