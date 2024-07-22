@@ -152,6 +152,7 @@ Instructions:
 2. If there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements.
 3. Do not include automatically generated citations or references in the response under any circumstances.
 4. Convey the enriched content exactly as it is to the user. Do not break it into paragraphs; present it as continuous text.
+5. Do not refer to or use any messages from the user's thread when crafting your response.
 """
 
 
