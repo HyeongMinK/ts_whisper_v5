@@ -489,7 +489,7 @@ st.markdown(
     <p class="small-text">Digital Wellness Lab 2024<br>
         Business Analytics, School of Management<br>
         Kyung Hee University<br>
-        Maintained by H-.M-. Kim & S-.W-. Kim</p>
+        Maintained by HyeongMin Kim & Sangwon Kim</p>
     """,
     unsafe_allow_html=True
 )
