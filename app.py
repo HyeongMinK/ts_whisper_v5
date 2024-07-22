@@ -347,35 +347,35 @@ if st.session_state.is_recording == True:
            st.session_state.is_recording = False
            st.rerun()
 
-    # Transcribe audio
-    progress_text.text("Transcribing audio...")
-    transcription = transcribe_audio(st.session_state.file_path)
-    progress_bar.progress(33)
+        # Transcribe audio
+        progress_text.text("Transcribing audio...")
+        transcription = transcribe_audio(st.session_state.file_path)
+        progress_bar.progress(33)
 
-    # Translate text
-    progress_text.text("Translating text...")
-    if use_rag:
-        ts_text = gpt_call(client, transcription, selected_language, selected_tone)
-    else:
-        ts_text = translator_call(client, transcription, selected_language, selected_tone)
+        # Translate text
+        progress_text.text("Translating text...")
+        if use_rag:
+            ts_text = gpt_call(client, transcription, selected_language, selected_tone)
+        else:
+            ts_text = translator_call(client, transcription, selected_language, selected_tone)
     progress_bar.progress(66)
 
-    # Convert translated text to speech
-    progress_text.text("Converting text to speech...")
-    tts_audio = text_to_speech(client, ts_text)
-    progress_bar.progress(100)
+        # Convert translated text to speech
+        progress_text.text("Converting text to speech...")
+        tts_audio = text_to_speech(client, ts_text)
+        progress_bar.progress(100)
 
-    # Append results to session state lists
-    st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
-    st.session_state.file_paths.insert(st.session_state.temp_page,st.session_state.file_path)
-    st.session_state.ts_texts.insert(st.session_state.temp_page,ts_text)
-    st.session_state.tts_audio_data.insert(st.session_state.temp_page,tts_audio)
+        # Append results to session state lists
+        st.session_state.transcriptions.insert(st.session_state.temp_page,transcription)
+        st.session_state.file_paths.insert(st.session_state.temp_page,st.session_state.file_path)
+        st.session_state.ts_texts.insert(st.session_state.temp_page,ts_text)
+        st.session_state.tts_audio_data.insert(st.session_state.temp_page,tts_audio)
 
-    #temp_Page
-    st.session_state.temp_page+=1
+        #temp_Page
+        st.session_state.temp_page+=1
 
-    st.session_state.is_recording = False
-    st.rerun()
+        st.session_state.is_recording = False
+        st.rerun()
 
 st.sidebar.title("Recordings")
 
