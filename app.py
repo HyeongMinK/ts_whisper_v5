@@ -453,7 +453,7 @@ if st.session_state.temp_page == -1:
             ts_text = translator_call(client, all_script, selected_language, selected_tone)
         after_script += ts_text
     st.markdown("#### After translation")
-    st.markdown(f"```\n{after_script}\n```")                
+    st.markdown(f"<div style='white-space: pre-wrap;'>{all_script}</div>", unsafe_allow_html=True)                
 
 st.markdown(
     """
