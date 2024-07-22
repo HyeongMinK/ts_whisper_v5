@@ -102,8 +102,6 @@ if 'tts_audio_data' not in st.session_state:
 if 'is_recording' not in st.session_state:
     st.session_state.is_recording = False
 
-if 'once_recording' not in st.session_state:
-    st.session_state.once_recording = False
 
 if 'temp_page' not in st.session_state:
     st.session_state.temp_page = 0
@@ -326,7 +324,6 @@ if st.session_state.temp_page > -1:
             re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
-    st.session_state.once_recording = True
     st.session_state.progress_done = False
     
     with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as tmp_wav_file:
@@ -381,7 +378,7 @@ if st.session_state.is_recording == True:
 
 st.sidebar.title("Recordings")
 
-if st.session_state.once_recording == True and st.session_state.transcriptions:
+if st.session_state.transcriptions:
 
 
     for i in range(len(st.session_state.transcriptions)):
