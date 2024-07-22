@@ -479,10 +479,11 @@ st.markdown(
         font-size: 10px;   /* 글씨 크기 설정 */
         color: gray;       /* 텍스트 색상 설정 */
         position: relative;/* 상대 위치 설정 */
-        bottom: -150px;     /* 페이지 하단에서 50px 위로 */
+        bottom: -150px;    /* 페이지 하단에서 150px 위로 */
         width: 100%;       /* 너비를 페이지 전체로 설정 */
         text-align: center;/* 가운데 정렬 */
         background-color: white; /* 배경색 설정 */
+        line-height: 0.7;  /* 줄 간격 설정 */
     }
     </style>
     <p class="small-text">Digital Wellness Lab 2024<br>
@@ -492,6 +493,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
       
 
