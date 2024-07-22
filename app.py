@@ -478,6 +478,13 @@ st.markdown(
     .small-text {
         font-size: 12px;   /* 글씨 크기 설정 */
         color: gray;       /* 텍스트 색상 설정 */
+        position: relative;/* 상대 위치 설정 */
+        bottom: -50px;     /* 페이지 하단에서 50px 위로 */
+        width: 100%;       /* 너비를 페이지 전체로 설정 */
+        text-align: center;/* 가운데 정렬 */
+        background-color: white; /* 배경색 설정 */
+        padding: 10px 0;    /* 상하 여백 설정 */
+        box-shadow: 0px -1px 5px rgba(0,0,0,0.1); /* 약간의 그림자 효과 */
     }
     </style>
     <p class="small-text">Digital Wellness Lab 2024<br>
@@ -487,6 +494,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
       
 
     # Delete temporary files if needed
