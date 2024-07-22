@@ -317,7 +317,7 @@ col1_audio, col2_audio = st.columns([1, 3])
 
 if st.session_state.temp_page > -1:
     with col1_audio:
-        audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
+        audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode, use_container_width=True)
 
     with col2_audio:
         if st.session_state.transcriptions:
