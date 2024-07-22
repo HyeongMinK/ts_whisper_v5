@@ -8,6 +8,21 @@ import warnings
 from pydub import AudioSegment
 import time
 
+
+# 하단 고정 텍스트와 스타일 조정
+st.markdown(
+    """
+    <style>
+    section[data-testid="stSidebar"] {
+        width: 150px !important; # Set the width to your desired value
+    }
+    </style>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
 # Suppress FP16 warning
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
