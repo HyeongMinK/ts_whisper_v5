@@ -476,7 +476,7 @@ st.markdown(
     """
     <style>
     .small-text {
-        font-size: 12px;   /* 글씨 크기 설정 */
+        font-size: 8px;   /* 글씨 크기 설정 */
         color: gray;       /* 텍스트 색상 설정 */
         position: relative;/* 상대 위치 설정 */
         bottom: -150px;     /* 페이지 하단에서 50px 위로 */
