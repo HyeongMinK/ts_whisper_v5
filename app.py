@@ -378,7 +378,7 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
         if st.sidebar.button(button_label):
             st.session_state.temp_page = i+1
             st.rerun()
-    if st.sidebar.button("All transcriptions"):
+    if st.sidebar.button("All transcriptions",type="primary"):
         st.session_state.temp_page = -1
         st.rerun()
 
