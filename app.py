@@ -441,7 +441,9 @@ if st.session_state.temp_page == -1:
     all_script=""
     for content in st.session_state.transcriptions:
         all_script+=content
-    st.text_area("All transcriptions", value = all_script, disabled=True)                
+    st.text_area("All transcriptions", value = all_script, disabled=True)
+    
+    if st.button(f"Translate to {selected_language}"):                
 
 st.markdown(
     """
