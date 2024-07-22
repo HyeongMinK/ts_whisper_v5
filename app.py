@@ -435,7 +435,13 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
                         st.session_state.ts_texts.insert(change_option, st.session_state.ts_texts.pop(i))
                         st.session_state.tts_audio_data.insert(change_option, st.session_state.tts_audio_data.pop(i))
                         st.session_state.temp_page = change_option + 1
-                        st.rerun()                    
+                        st.rerun()
+
+if st.session_state.temp_page == -1:
+    all_script=""
+    for content in st.session_state.transcriptions:
+        all_script+=content
+    st.text_area("All transcriptions", value = all_script, disabled=True)                
 
 st.markdown(
     """
