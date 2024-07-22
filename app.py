@@ -483,7 +483,7 @@ st.markdown(
         width: 100%;       /* 너비를 페이지 전체로 설정 */
         text-align: center;/* 가운데 정렬 */
         background-color: white; /* 배경색 설정 */
-        line-height: 1;  /* 줄 간격 설정 */
+        line-height: 1.2;  /* 줄 간격 설정 */
     }
     </style>
     <p class="small-text">Digital Wellness Lab 2024<br>
