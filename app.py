@@ -12,7 +12,7 @@ import time
 warnings.filterwarnings("ignore", message="FP16 is not supported on CPU; using FP32 instead")
 
 # Load the Whisper model
-@st.cache_data
+@st.cache_resource
 def load_whisper_model():
     return whisper.load_model("small")
 
