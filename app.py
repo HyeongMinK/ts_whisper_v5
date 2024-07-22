@@ -145,7 +145,7 @@ def gpt_call(client, text, selected_language, selected_tone):
 Role: Presentation Script Maker and Translator
 
 Response Language:
-Translate the enriched content into {{selected_language}} and provide it to the user in that language only.
+Translate the enriched content into {selected_language} and provide it to the user in that language only.
 
 Instructions:
 1. Access the user's statements and the given files. Read them thoroughly.
