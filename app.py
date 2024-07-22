@@ -96,13 +96,7 @@ if 'temp_page' not in st.session_state:
 if 'is_re_recording' not in st.session_state:
     st.session_state.is_re_recording = False
 
-if 'label_visibility' not in st.session_state:
-    st.session_state.label_visibility = "visible"
 
-if st.session_state.temp_page == -1:
-    st.session_state.label_visibility = "collapsed"
-else:
-    st.session_state.label_visibility = "visible"
 
 
 def transcribe_audio(file_path):
@@ -204,10 +198,10 @@ tones = ['Default', 'Politely and Academically']
 
 col1_tone, col2_file_uploader = st.columns([1, 1])
 with col1_tone:
-    selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True, label_visibility = st.session_state.label_visibility)
-    use_rag = st.toggle("Using RAG", label_visibility = st.session_state.label_visibility)
+    selected_tone = st.radio(label="Tone", options=tones, index=0, horizontal = True)
+    use_rag = st.toggle("Using RAG")
 with col2_file_uploader:
-    uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader, label_visibility = st.session_state.label_visibility)
+    uploaded_files= st.file_uploader("Upload File", type = ['txt', 'doc', 'docx', 'pdf', 'pptx'], accept_multiple_files=True, on_change = state_uploader)
 
     if st.session_state.uploader and len(uploaded_files)>len(st.session_state.uploader_list):
 
@@ -297,7 +291,7 @@ with col2_file_uploader:
 
 
 # 언어 선택 박스 (기본값을 영어로 설정)
-selected_language = st.selectbox('Language', languages, index=1, label_visibility = st.session_state.label_visibility)
+selected_language = st.selectbox('Language', languages, index=1)
 
 col1_audio, col2_audio = st.columns([1, 3])
 
