@@ -293,12 +293,13 @@ if st.session_state.temp_page > -1:
 
 col1_audio, col2_audio = st.columns([1, 3])
 
-with col1_audio:
-    audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
+if st.session_state.temp_page > -1:
+    with col1_audio:
+        audio = mic_recorder(start_prompt=f"Start R{st.session_state.temp_page+1} Recording", stop_prompt="Stop", format="webm", callback=state_recode)
 
-with col2_audio:
-    if st.session_state.transcriptions:
-        re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
+    with col2_audio:
+        if st.session_state.transcriptions:
+            re_audio = mic_recorder(start_prompt="Re-record", stop_prompt="Stop", format="webm", callback=state_re_recode)
 
 if st.session_state.is_recording == True:
     st.session_state.once_recording = True
