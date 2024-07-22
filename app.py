@@ -342,7 +342,7 @@ if st.session_state.is_recording == True:
     # Initialize progress bar
     progress_bar = st.progress(0)
     progress_text = st.empty()
-    if st.session_state.progress_done == True
+    if st.session_state.progress_done == True:
         if st.button("Stop Progress", type = "primary"):
            st.session_state.is_recording = False
            st.rerun()
