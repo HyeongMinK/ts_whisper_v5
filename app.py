@@ -96,6 +96,8 @@ if 'temp_page' not in st.session_state:
 if 'is_re_recording' not in st.session_state:
     st.session_state.is_re_recording = False
 
+if 'after_script' not in st.session_state:
+    st.session_state.after_script = ""
 
 
 
@@ -439,7 +441,6 @@ if st.session_state.once_recording == True and st.session_state.transcriptions:
 
 if st.session_state.temp_page == -1:
     all_script=""
-    after_script=""
     for content in st.session_state.transcriptions:
         all_script+=content
     st.markdown("#### All transcriptions")
@@ -447,13 +448,14 @@ if st.session_state.temp_page == -1:
 
     
     if st.button(f"Translate to {selected_language}"):
+        st.session_state.after_script =""
         if use_rag:
             ts_text = gpt_call(client, all_script, selected_language, selected_tone)
         else:
             ts_text = translator_call(client, all_script, selected_language, selected_tone)
-        after_script += ts_text
+        st.session_state.after_script += ts_text
     st.markdown("#### After translation")
-    st.markdown(f"<pre>{after_script}</pre>", unsafe_allow_html=True)                
+    st.markdown(f"<pre>{st.session_state.after_script}</pre>", unsafe_allow_html=True)                
 
 st.markdown(
     """
