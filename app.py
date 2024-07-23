@@ -144,9 +144,6 @@ def gpt_call(client, text, selected_language, selected_tone):
     content = f"""
 Role: Presentation Script Maker and Translator
 
-Response Language:
-Translate the enriched content into {selected_language} and provide it to the user in that language only. Ensure that the entire response is in {selected_language}.
-
 Instructions:
 1. Read the user's statements and the given files thoroughly.
 
@@ -169,7 +166,8 @@ Instructions:
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     content += f"Finally, never reference the context within the thread. and translate the script to {selected_language}"
     
-    run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
+    run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content, additional_messages = f"Response Language:
+Translate the enriched content into {selected_language} and provide it to the user in that language only. Ensure that the entire response is in {selected_language}.")
     run_id = run.id
     
     # Check if the run has been completed within a short time period
