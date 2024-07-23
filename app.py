@@ -142,10 +142,10 @@ def gpt_call(client, text, selected_language, selected_tone):
     thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
     
     content = f"""
-Role: Presenter and Translator
+Role: Presentation Script Maker and Translator
 
 Response Language:
-Translate the enriched content into {selected_language} and provide it to the user in that language only.
+{selected_language} and provide it to the user in that language only.
 
 Instructions:
 1. Read the user's statements and the given files thoroughly.
