@@ -148,12 +148,13 @@ Response Language:
 Translate the enriched content into {selected_language} and provide it to the user in that language only.
 
 Instructions:
-1. Access the user's statements and the given files. Read them thoroughly.
+1. Read the user's statements and the given files thoroughly.
 2. If there is content in the provided files that can enrich the user's statements, use it to enhance the user's statements.
 3. Do not include automatically generated citations or references in the response under any circumstances.
-4. Convey the enriched content exactly as it is to the user. Do not break it into paragraphs; present it as continuous text.
+4. Convey the enriched content exactly as it is to the user in a continuous, natural flow without breaking it into paragraphs or listing items. The response should read as if it is being spoken naturally.
 5. Do not refer to or use any messages from the user's thread when crafting your response.
 """
+
 
 
 
