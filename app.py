@@ -202,7 +202,7 @@ def delete_files(i):
 
 def state_recode():
     st.session_state.is_recording = True
-    if st.buttion("Cancel Recording"):
+    if st.button("Cancel Recording"):
         st.session_state.is_recording = False
         st.rerun()
         
@@ -210,7 +210,7 @@ def state_recode():
 def state_re_recode():
     st.session_state.is_recording = True
     st.session_state.is_re_recording = True
-    if st.buttion("Cancel Recording"):
+    if st.button("Cancel Recording"):
         st.session_state.is_recording = False
         st.session_state.is_re_recording = False
         st.rerun()
