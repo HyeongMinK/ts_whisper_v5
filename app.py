@@ -54,12 +54,17 @@ def delete_all_files():
         client.files.delete(file_id)
 
 def delete_messages(id):
-# 스레드의 메시지 목록을 불러오기
-    messages = client.beta.threads.messages.list(thread_id=id)
-    # 메시지 목록에서 모든 메시지 삭제하기
-    for message in messages:
-        message_id = message.id
-        deleted_message_response = client.beta.threads.messages.delete(thread_id=id, message_id=message_id)
+    try:
+        # 스레드의 메시지 목록을 불러오기
+        messages = client.beta.threads.messages.list(thread_id=id).get('messages', [])
+        # 메시지 목록에서 모든 메시지 삭제하기
+        for message in messages:
+            message_id = message['id']
+            client.beta.threads.messages.delete(thread_id=id, message_id=message_id)
+        print("All messages deleted successfully.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
 
 
