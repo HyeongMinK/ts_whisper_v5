@@ -202,18 +202,12 @@ def delete_files(i):
 
 def state_recode():
     st.session_state.is_recording = True
-    if st.button("Cancel Recording"):
-        st.session_state.is_recording = False
-        st.rerun()
-        
 
 def state_re_recode():
     st.session_state.is_recording = True
+    st.session_state.temp_page-=1
+    delete_files(st.session_state.temp_page)
     st.session_state.is_re_recording = True
-    if st.button("Cancel Recording"):
-        st.session_state.is_recording = False
-        st.session_state.is_re_recording = False
-        st.rerun()
 
 
 def merge_audios_with_silence(audio_files, silence_duration=700):
@@ -350,8 +344,6 @@ if st.session_state.is_recording == True:
         if st.session_state.is_re_recording == False:
             tmp_wav_file.write(audio["bytes"])
         else:
-            st.session_state.temp_page-=1
-            delete_files(st.session_state.temp_page)
             tmp_wav_file.write(re_audio["bytes"])
             st.session_state.is_re_recording = False
 
