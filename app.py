@@ -375,7 +375,6 @@ if st.session_state.is_recording == True:
         progress_text.text("Translating text...")
         if use_rag:
             ts_text = gpt_call(client, transcription, selected_language, selected_tone)
-            delete_messages(st.session_state.thread_id)
         else:
             ts_text = translator_call(client, transcription, selected_language, selected_tone)
         progress_bar.progress(66)
