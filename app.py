@@ -139,7 +139,7 @@ def translator_call(client, text, selected_language, selected_tone):
 def gpt_call(client, text, selected_language, selected_tone):
     thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
     
-    thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text+f"Your response should be in {selected_language}. and Your response should be as if you are the presenter delivering the presentation, and please remove any introductory remarks.")    
+    thread_message = client.beta.threads.messages.create(thread_id, role="user", content="user's presentation:"+text+f"Your response should be in {selected_language}. and Your response should be as if you are the presenter delivering the presentation, and please remove any introductory remarks. and Please respond in a continuous text format. Write all explanations in naturally flowing sentences without using code blocks or bullet points.")    
     
     content = f"""
 Content:
