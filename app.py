@@ -47,11 +47,13 @@ def delete_all_files_in_vector(vector_store_id, file_list):
 def delete_all_files():
     # Get the list of all files
     files = client.files.list()
-    
-    # Iterate over the files and delete each one
-    for file in files:
-        file_id = file.id
-        client.files.delete(file_id)
+    try:
+        # Iterate over the files and delete each one
+        for file in files:
+            file_id = file.id
+            client.files.delete(file_id)
+    except Exception as e:
+        print("")
 
 def delete_messages(id):
 # 스레드의 메시지 목록을 불러오기
