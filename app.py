@@ -139,7 +139,7 @@ def translator_call(client, text, selected_language, selected_tone):
 def gpt_call(client, text, selected_language, selected_tone):
     thread_id = "thread_nJyOZmEHQaabCI1wcOLjzgNs"
     
-    thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
+    thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text+f"Your response should be in {selected_language}. and Your response should be as if you are the presenter delivering the presentation, and please remove any introductory remarks.")    
     
     content = f"""
 Content:
@@ -164,6 +164,7 @@ Instructions:
     
     run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content, additional_instructions
  = f"Response Language: Translate the enriched content into {selected_language} and provide it to the user in that language only. Ensure that the entire response is in {selected_language}."  )
+
     run_id = run.id
     
     # Check if the run has been completed within a short time period
