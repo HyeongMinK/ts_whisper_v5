@@ -141,7 +141,7 @@ def gpt_call(client, text, selected_language, selected_tone):
     
     thread_message = client.beta.threads.messages.create(thread_id, role="user", content=text)    
     
-content = f"""
+    content = f"""
 Role: Presentation Script Maker and Translator
 
 Response Language:
