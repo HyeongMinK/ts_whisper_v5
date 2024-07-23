@@ -499,7 +499,7 @@ if st.session_state.temp_page == -1:
     st.markdown("#### After translation")
     st.markdown(f"<pre>{st.session_state.after_script}</pre>", unsafe_allow_html=True)
     if st.session_state.after_script:
-        if st.button("Listen to all saved audio"):
+        if st.button("Listen to audio"):
             tts_audio = text_to_speech(client, st.session_state.after_script)
             st.audio(tts_audio, format='audio/mp3')
             # 다운로드 버튼 추가
