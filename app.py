@@ -167,7 +167,7 @@ Instructions:
 
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
-    content += "Finally, never reference the context within the thread."
+    content += f"Finally, never reference the context within the thread. and translate the script to {selected_language}"
     
     run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content)
     run_id = run.id
