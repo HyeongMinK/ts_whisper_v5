@@ -161,7 +161,7 @@ Instructions:
 
 
 
-    print(content)
+    st.write(content)
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     content += f"Finally, never reference the context within the thread. and translate the script to {selected_language}"
