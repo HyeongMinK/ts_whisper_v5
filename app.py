@@ -157,7 +157,6 @@ Instructions:
 
 
 
-    st.write(content)
     if selected_tone == "Politely and Academically":
         content += " and the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     content += f"Finally, never reference the context within the thread. and translate the script to {selected_language}"
@@ -180,7 +179,9 @@ Instructions:
         if run_status.status == "completed":
             thread_messages = client.beta.threads.messages.list(thread_id)
             if thread_messages.data and thread_messages.data[0].content[0].text.value:
-                return thread_messages.data[0].content[0].text.value
+                return_message = thread_messages.data[0].content[0].text.value
+                delete_messages(st.session_state.thread_id)
+                return return_message
     
     # If the message is not processed within the timeout period
     return "The process was not completed within the expected time."
