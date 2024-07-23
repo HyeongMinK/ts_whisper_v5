@@ -167,8 +167,7 @@ Instructions:
     content += f"Finally, never reference the context within the thread. and translate the script to {selected_language}"
     
     run = client.beta.threads.runs.create(thread_id=thread_id, assistant_id="asst_QvnqTXw1LoxeqmwHAn2IMVoW", instructions=content, additional_instructions
- = f"Response Language:
-Translate the enriched content into {selected_language} and provide it to the user in that language only. Ensure that the entire response is in {selected_language}."  )
+ = f"Response Language: Translate the enriched content into {selected_language} and provide it to the user in that language only. Ensure that the entire response is in {selected_language}."  )
     run_id = run.id
     
     # Check if the run has been completed within a short time period
