@@ -131,7 +131,7 @@ def translator_call(client, text, selected_language, selected_tone):
     if selected_tone == "Politely and Academically":
         content += "and Second, the tone of the translated sentences must be very polite and academic. this mean you can change the word to be very polite and academic"
     completion = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": content},
             {"role": "user", "content": text}
